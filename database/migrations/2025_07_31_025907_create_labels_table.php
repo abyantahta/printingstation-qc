@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('labels', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('part_no')->unique();
+            $table->string('customer');
+            $table->string('model');
+            $table->string('part_name');
+            $table->integer('qty');
+            $table->string('job_no');
+            $table->string('kode_unik');
+            $table->string('kode');
+            $table->string('marking');
+            $table->string('warna_kertas');
+            // $table->string('line_id');
+            $table->foreignId('line_id')->constrained()->onDelete('cascade');
+            // $table->foreign('line_id')->references('line_id')->on('lines')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('labels');
+    }
+};
