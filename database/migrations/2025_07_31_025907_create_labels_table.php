@@ -19,11 +19,11 @@ return new class extends Migration
             $table->string('model');
             $table->string('part_name');
             $table->integer('qty');
-            $table->string('job_no');
-            $table->string('kode_unik');
-            $table->string('kode');
-            $table->string('marking');
-            $table->string('warna_kertas');
+            $table->string('job_no')->nullable();
+            $table->string('kode_unik')->nullable();
+            $table->string('kode')->nullable();
+            $table->string('marking')->nullable();
+            $table->string('warna_kertas')->nullable();
             // $table->string('line_id');
             $table->foreignId('line_id')->constrained()->onDelete('cascade');
             // $table->foreign('line_id')->references('line_id')->on('lines')->onDelete('cascade');

@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('piclabels', function (Blueprint $table) {
+        Schema::create('current_users', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string('name');
             $table->string('npk');
-            $table->string('uniqueCode');
         });
     }
 
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('piclabels');
+        Schema::dropIfExists('current_users');
     }
 };

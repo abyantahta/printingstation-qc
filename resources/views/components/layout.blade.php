@@ -24,6 +24,11 @@
                 .font-inria {
                 font-family: "Inria Sans", sans-serif;
                 }
+                *{
+                    /* padding: 0; */
+                    box-sizing: border-box
+                
+                }
             </style>
     </head>
     <body>
