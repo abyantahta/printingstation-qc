@@ -29,6 +29,23 @@
                     box-sizing: border-box
                 
                 }
+                @media print {
+            body { margin: 0; }
+            .print-label { 
+                page-break-inside: avoid; 
+                margin: 0;
+                padding: 0;
+            }
+            .no-print { display: none; }
+        }
+        .print-label {
+            width: 30rem;
+            height: 15rem;
+            padding: 0.5rem;
+            background: white;
+            border: 2px solid #000;
+            font-family: Arial, sans-serif;
+        }
             </style>
     </head>
     <body>
