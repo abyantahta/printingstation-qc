@@ -6,6 +6,8 @@ use App\Models\CurrentUser;
 use App\Models\Label;
 use App\Models\Piclabel;
 use Illuminate\Http\Request;
+use Spatie\LaravelPdf\Facades\Pdf;
+use Illuminate\Support\Facades\Log;
 
 class QRLoginController extends Controller
 {
@@ -116,62 +118,61 @@ class QRLoginController extends Controller
     }
 
     public function printLabel(Request $request){
-        $quantity = $request->input('quantity');
-        $label = session('label_data');
-        $qcPass = session('qc_pass');
-        $shift = session('shift');
-        $qr_value = session('qr_value');
-        
-        if (!$label) {
-            return redirect()->back()->withErrors('No label data found. Please scan a label first.');
-        }
-        
-        if (!$quantity || $quantity <= 0) {
-            return redirect()->back()->withErrors('Please enter a valid quantity.');
-        }
-        
-        // Store quantity in session for display
-        session(['print_quantity' => $quantity]);
-        
-        // Generate QR codes for each label using SVG format (no ImageMagick required)
-        $qrCodes = [];
-        for ($i = 0; $i < $quantity; $i++) {
-            $qrValue = null;
-            if($qr_value == $label->job_no){
-                $qrValue = $label->job_no . "-" . str_pad($i + 1, 3, '0', STR_PAD_LEFT);
-            }else if($qr_value == $label->part_no){
-                $qrValue = $label->part_no . str_pad($i + 1, 3, '0', STR_PAD_LEFT);
+        try {
+            $quantity = $request->input('quantity');
+            $label = session('label_data');
+            $qcPass = session('qc_pass');
+            $shift = session('shift');
+            $qr_value = session('qr_value');
+            
+            if (!$label) {
+                return redirect()->back()->withErrors('No label data found. Please scan a label first.');
             }
-            $qrCodes[] = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')->size(100)->generate($qrValue);
+            
+            if (!$quantity || $quantity <= 0) {
+                return redirect()->back()->withErrors('Please enter a valid quantity.');
+            }
+            
+            // Store quantity in session for display
+            session(['print_quantity' => $quantity]);
+            
+            // Generate QR codes for each label using SVG format (no ImageMagick required)
+            $qrCodes = [];
+            for ($i = 0; $i < $quantity; $i++) {
+                $qrValue = null;
+                if($qr_value == $label->job_no){
+                    $qrValue = $label->job_no . "-" . str_pad($i + 1, 3, '0', STR_PAD_LEFT);
+                }else if($qr_value == $label->part_no){
+                    $qrValue = $label->part_no . str_pad($i + 1, 3, '0', STR_PAD_LEFT);
+                }
+                $qrCodes[] = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')->size(100)->generate($qrValue);
+            }
+            
+            // Generate print data
+            $printData = [
+                'label' => $label,
+                'quantity' => $quantity,
+                'qcPass' => $qcPass,
+                'shift' => $shift,
+                'printDate' => now()->format('d/m/Y'),
+                'lotNo' => $shift ? now()->format('ymd') : '-',
+                'qrCodes' => $qrCodes,
+                'qrValue' => $qrValue
+            ];
+            
+            // Generate PDF with Spatie Laravel PDF
+            $filename = 'labels_' . $label->job_no . '_' . now()->format('Y-m-d_H-i-s') . '.pdf';
+            return Pdf::view('pages.print-label-pdf', compact('printData'))
+                ->format('A4') // We'll set custom size in the view with @page CSS
+                ->download($filename);
+        } catch (\Exception $e) {
+            Log::error('PDF Generation Error: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            return redirect()->back()->withErrors('Error generating PDF: ' . $e->getMessage());
         }
-        
-        // Generate print data
-        $printData = [
-            'label' => $label,
-            'quantity' => $quantity,
-            'qcPass' => $qcPass,
-            'shift' => $shift,
-            'printDate' => now()->format('d/m/Y'),
-            'lotNo' => $shift ? now()->format('ymd') : '-',
-            'qrCodes' => $qrCodes,
-            'qrValue' => $qrValue
-        ];
-        
-        // Store print data in session for the print view
-        session(['print_data' => $printData]);
-        
-        return redirect()->route('show.print.label');
     }
 
-    public function showPrintLabel(){
-        $printData = session('print_data');
-        
-        if (!$printData) {
-            return redirect()->route('print')->withErrors('No print data found.');
-        }
-        
-        return view('pages.print-label', compact('printData'));
-    }
+
 
     public function logout(){
         CurrentUser::query()->delete();

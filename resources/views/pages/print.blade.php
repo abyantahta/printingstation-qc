@@ -1,7 +1,134 @@
 <x-layout>
     {{-- <h1 class="bg-red-400">halo semuanya</h1> --}}
     <div class="w-full flex flex-col items-center pt-12 ">
-        <div class="w-full flex flex-col items-center">
+
+        <div class="label-page">
+            <div class="label-container">
+                <!-- Header -->
+                <table class="header-table">
+                    <tr>
+                        <td class="logo-cell">
+                            <img src="{{ asset('storage/logosdi.png') }}" alt="logo" />
+                        </td>
+                        <td class="title-cell">TAG LABEL</td>
+                    </tr>
+                </table>
+                
+                <!-- Content -->
+                <table class="content-table">
+                    <tr>
+                        <td>
+                            <!-- Info Section --> 
+                            <table style="width: 100%; padding:0;">
+                                <tr style="">
+                                    <td>
+                                        <table class="info-table">
+                                            <tr>
+                                                <td class="info-label">PART NO</td>
+                                                <td class="info-value">: 25051-BZ060-00</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="info-label">PART NAME</td>
+                                                <td class="info-value">: FRAME SUB-ASSY, FR DOOR, FR</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="info-label">LOT NO</td>
+                                                <td class="info-value">: B250872 </td>
+                                            </tr>
+                                            <tr>
+                                                {{-- <td class="info-label">LOT NO</td> --}}
+                                                <td class="quantity-label">QUANTITY</td>
+                                                <td >
+                                                    <table class="quantity-table">
+                                                        <tr>
+                                                            <td class="quantity-text">: 20  pcs</td>
+                                                            <td class="unique-code">XLR</td>
+                                                            <td class="job-number">BX-0841-00</td>
+                                                        </tr>
+                                                    </table>
+                                                    
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="width: 25%;height:100%">
+                                        <table class="status-table">
+                                            <tr>
+                                                <td class="ok-status">OK</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="date-section">DATE : 20/07/2025</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- Bottom Section -->
+                            <table class="bottom-table">
+                                <tr>
+                                    <td class="left-section">
+                                        <table style="width: 100%;">
+                                            <tr style="">
+                                                <td style="">
+                                                    <table class="grid-table">
+                                                        <tr style="">
+                                                            <td class="d55-cell">D55</td>
+                                                            <td class="job-cell">JOB NO</td>
+                                                            <td class="mark-cell">MARK</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="finish-good">FINISH<br>GOOD</td>
+                                                            <td style="padding: 0;">
+                                                                <table style="width: 100%;">
+                                                                    <tr>
+                                                                        <td class="job-top">BX-0841</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="job-bottom">-</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td class="mark-content">XL</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td class="qr-section">
+                                                    <div class="qr-container">
+                                                        {{-- dasdas --}}
+                                                        {{-- {!! $printData['qrCodes'][$i] !!} --}}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="qc-section">
+                                        <table class="qc-table">
+                                            <tr>
+                                                <td class="qc-footer">QC PASS BY :</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="qc-footer">Abyan Tahta F.A.P</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="qc-footer">QUALITY INSPECTOR</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- Form Footer -->
+                            {{-- <div class="form-footer">
+                                FORM QC-001/PROS-SDI-QC-005/REV 1
+                            </div> --}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="w-full flex mt-80 flex-col items-center">
             <div class="flex gap-2 mb-2">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
@@ -139,7 +266,7 @@
                     <div class="flex gap-4 h-10">
                         <input name="quantity" placeholder="0" class="border-3 bg-white rounded-md font-bold text-center placeholder:text-xl text-xl w-full" type="number" min="1" value="{{ session('print_quantity', '') }}" required>
                     </div>
-                    <button type="submit" class="bg-blue-300 mt-4 font-bold hover:brightness-110 hover:duration-200 border-2 h-12 rounded-sm cursor-pointer w-full">Print</button>
+                    <button type="submit" class="bg-blue-300 mt-4 font-bold hover:brightness-110 hover:duration-200 border-2 h-12 rounded-sm cursor-pointer w-full">Download PDF</button>
                 </form>
             </div>
         </div>

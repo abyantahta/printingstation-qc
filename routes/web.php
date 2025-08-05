@@ -16,6 +16,6 @@ Route::post('/reset-session', [QRLoginController::class, 'resetSession'])->name(
 Route::post('/update-qc-pass', [QRLoginController::class, 'updateQcPass'])->name('update.qc.pass');
 Route::post('/update-shift', [QRLoginController::class, 'updateShift'])->name('update.shift');
 Route::post('/print-label', [QRLoginController::class, 'printLabel'])->name('print.label');
-Route::get('/show-print-label', [QRLoginController::class, 'showPrintLabel'])->name('show.print.label');
+// Route::get('/show-print-label', [QRLoginController::class, 'showPrintLabel'])->name('show.print.label');
 Route::get('/', [QRLoginController::class, 'index'])->name('index');
 Route::get('/print', [QRLoginController::class, 'printIndex'])->name('print');
