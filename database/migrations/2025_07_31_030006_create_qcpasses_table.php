@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('qc_username');
-            $table->foreignId('line_id')->constrained()->onDelete('cascade');
+            // $table->foreignId('line_id')->constrained()->onDelete('cascade');
         });
     }
 

@@ -1562,18 +1562,27 @@
             padding: 0;
             font-family: Arial, sans-serif;
         }
-        
+        .label-outer{
+            /* padding: 0 2px; */
+            padding-left: 4px;
+            padding-right: 4px;
+            padding-top: 77px;
+        }
         .label-page {
             width: 30rem;
-            height: 15.5rem;
-            margin: 0;
-            padding: 5px;
+            height: 14.4rem;
+            /* margin: 0 10px; */
+            /* margin-bottom: -70px; */
+            
+            /* margin: 0; */
+            padding: 2px;
+            /* padding-top: 110px; */
             border: 2px solid #000;
             box-sizing: border-box;
             page-break-after: always;
         }
         
-        .label-page:last-child {
+        .label-outer:last-child {
             page-break-after: avoid;
         }
         
@@ -1590,7 +1599,7 @@
         
         .header-table {
             width: 100%;
-            height: 36px;
+            height: 40px;
             padding: 2px;
             border: 1px solid #000;
             margin-bottom : 4px
@@ -1608,9 +1617,10 @@
         }
         
         .logo-cell img {
-            height: 40pt;
+            height: 40px;
             max-width: 95%;
-            padding-left:4px;
+            /* padding-left:10px; */
+            margin: 0 auto;
         }
         
         .title-cell {
@@ -1646,8 +1656,8 @@
         }
         
         .info-label {
-            width: 88pt;
-            height: 20px;
+            width: 35pt;
+            height: 18px;
             border-right: 1pt solid #000;
         }
         
@@ -1676,12 +1686,13 @@
         }
         
         .quantity-text {
-            width: 90px;
+            width: 84px;
             border-bottom: none !important;
+            border-left: none !important;
         }
         
         .unique-code {
-            width: 60px;
+            width: 106px;
             text-align: center;
             font-size: 14pt;
             border-left: 1pt solid #000;
@@ -1690,10 +1701,10 @@
         }
         
         .job-number {
-            width: 112pt;
+            width: 138px;
             text-align: center;
             border-bottom: none !important;
-            font-size: 10pt;
+            font-size: 7pt !important;
         }
         
         .status-table {
@@ -1737,7 +1748,7 @@
         }
         
         .left-section {
-            width: 75%;
+            width: 74.9%;
         
         }
         
@@ -1747,13 +1758,13 @@
         
         .grid-table td {
             border: 1pt solid #000;
-            padding: 2pt;
+            padding: 2pt 1pt;
             font-weight: bold;
             font-size: 8pt;
         }
         
         .d55-cell {
-            width: 97px;
+            width: 75px;
             height: 10px;
             border-top:none !important;
             border-left:none !important;
@@ -1762,7 +1773,7 @@
         }
         
         .job-cell {
-            width: 59px;
+            width: 54px;
             height: 10px;
             border-top:none !important;
             text-align: center;
@@ -1771,7 +1782,7 @@
         
         .mark-cell {
             text-align: center;
-            width: 40px;
+            width: 65px;
             height: 10px;
             border-top:none !important;
             border-right: 1px solid black;
@@ -1800,12 +1811,12 @@
         
         .mark-content {
             text-align: center;
-            font-size: 24px !important;
-            line-height: 1.6 !important;
+            font-size: 14px !important;
+            line-height: 1.9 !important;
         }
         
         .qr-section {
-            width: 109px;
+            width: 111px;
         }
         
         .qr-container {
@@ -1814,6 +1825,7 @@
             height: 67px;
             border-bottom: 1px solid black;
             margin: 0 auto;
+            padding: 5px 0;
         }
         
         .qr-container svg {
@@ -1822,7 +1834,7 @@
         }
         
         .qc-section {
-            width: 25%;
+            width: 25.1%;
             height: 100%;
 
             border-left: 1pt solid #000;

@@ -1,93 +1,134 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Labels</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        @page {
-            size: 480pt 240pt; /* 30rem x 15rem (1rem=16px=12pt) adjust as needed */
-            margin: 0;
-        }
-        body {
-            margin: 0;
-            padding: 0;
-            background: #f9fafb;
-        }
-        .label-page {
-            page-break-after: always;
-            width: 480pt;
-            height: 240pt;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .label-page:last-child {
-            page-break-after: avoid;
-        }
-    </style>
-</head>
-<body class="bg-gray-100">
+<x-layout>
 @for($i = 0; $i < $printData['quantity']; $i++)
-    <div class="label-page">
-        <div class="w-[28rem] h-[13rem] border-2 border-black bg-white flex flex-col p-2 justify-between">
-            <!-- Header -->
-            <div class="flex items-center border-b border-black pb-1">
-                <div class="w-3/4 flex items-center justify-center">
-                    <img src="{{ public_path('storage/logosdi.png') }}" alt="logo" class="h-10 object-contain" />
-                </div>
-                <div class="w-1/4 flex items-center justify-center font-bold text-lg">TAG LABEL</div>
+    <div class="label-outer">
+        <div class="label-page">
+            <div class="label-container">
+                <!-- Header -->
+                <table class="header-table">
+                    <tr>
+                        <td class="logo-cell">
+                            <img src="{{ asset('storage/logosdi.png') }}" alt="logo" />
+                        </td>
+                        <td class="title-cell">TAG LABEL</td>
+                    </tr>
+                </table>
+                
+                <!-- Content -->
+                <table class="content-table">
+                    <tr>
+                        <td>
+                            <!-- Info Section --> 
+                            <table style="width: 100%; padding:0;">
+                                <tr style="">
+                                    <td>
+                                        <table class="info-table">
+                                            <tr>
+                                                <td class="info-label">PART NO</td>
+                                                <td class="info-value">{{$printData['label']->part_no}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="info-label">PART NAME</td>
+                                                <td class="info-value">{{$printData['label']->part_name}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="info-label">LOT NO</td>
+                                                <td class="info-value">{{$printData['lotNo']}}</td>
+                                            </tr>
+                                            <tr>
+                                                {{-- <td class="info-label">LOT NO</td> --}}
+                                                <td class="quantity-label">QUANTITY</td>
+                                                <td >
+                                                    <table class="quantity-table">
+                                                        <tr>
+                                                            <td class="quantity-text">{{$printData['label']->qty}} pcs</td>
+                                                            <td class="unique-code">{{$printData['label']->kode_unik}}</td>
+                                                            <td class="job-number">{{ $printData['label']->job_no."-".str_pad($i+1, 3, '0', STR_PAD_LEFT) }}</td>
+                                                            {{-- <td class="job-number">14110-52S00-00001</td> --}}
+                                                        </tr>
+                                                    </table>
+                                                    
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="width: 25%;height:100%">
+                                        <table class="status-table">
+                                            <tr>
+                                                <td class="ok-status">OK</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="date-section">DATE : {{$printData['printDate']}}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- Bottom Section -->
+                            <table class="bottom-table">
+                                <tr>
+                                    <td class="left-section">
+                                        <table style="width: 100%;">
+                                            <tr style="">
+                                                <td style="">
+                                                    <table class="grid-table">
+                                                        <tr style="">
+                                                            <td class="d55-cell">D55</td>
+                                                            <td class="job-cell">JOB NO</td>
+                                                            <td class="mark-cell">MARK</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="finish-good">FINISH<br>GOOD</td>
+                                                            <td style="padding: 0;">
+                                                                <table style="width: 100%;">
+                                                                    <tr>
+                                                                        <td class="job-top">{{$printData['label']->job_no}}</td>
+                                                                        {{-- <td class="job-top">MANIFOLD</td> --}}
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="job-bottom">-</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            {{-- <td class="mark-content">{{$printData['label']->marking}}</td> --}}
+                                                            <td class="mark-content">ORANGE</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td class="qr-section">
+                                                    <div class="qr-container">
+                                                        {{-- dasdas --}}
+                                                        {!! $printData['qrCodes'][$i] !!}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="qc-section">
+                                        <table class="qc-table">
+                                            <tr>
+                                                <td class="qc-footer">QC PASS BY :</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="qc-footer">Abyan Tahta F.A.P</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="qc-footer">QUALITY INSPECTOR</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- Form Footer -->
+                            {{-- <div class="form-footer">
+                                FORM QC-001/PROS-SDI-QC-005/REV 1
+                            </div> --}}
+                        </td>
+                    </tr>
+                </table>
             </div>
-            <!-- Info Section -->
-            <div class="flex flex-row mt-1 flex-grow">
-                <div class="w-3/4 pr-2 flex flex-col justify-between">
-                    <div class="text-xs font-bold flex"><span class="w-20">PART NO</span><span class="flex-1">: {{ $printData['label']->part_no }}</span></div>
-                    <div class="text-xs font-bold flex"><span class="w-20">PART NAME</span><span class="flex-1">: {{ $printData['label']->part_name }}</span></div>
-                    <div class="text-xs font-bold flex"><span class="w-20">LOT NO</span><span class="flex-1">: {{ $printData['lotNo'] }}</span></div>
-                    <div class="flex items-center mt-1">
-                        <span class="w-20 text-xs font-bold">QUANTITY</span>
-                        <span class="text-xs font-bold">: {{ $printData['label']->qty }} pcs</span>
-                        <span class="mx-2 px-2 text-base font-bold border-x border-black">{{ $printData['label']->kode_unik }}</span>
-                        <span class="text-xs font-bold">{{ $printData['label']->job_no."-".str_pad($i+1, 3, '0', STR_PAD_LEFT) }}</span>
-                    </div>
-                </div>
-                <div class="w-1/4 flex flex-col items-center justify-between border-l border-black pl-2">
-                    <div class="text-4xl font-black leading-none">OK</div>
-                    <div class="text-[0.6rem] font-bold border-t border-black w-full text-center mt-1">DATE : {{ $printData['printDate'] }}</div>
-                </div>
-            </div>
-            <!-- Bottom Section -->
-            <div class="flex flex-row mt-1 flex-grow">
-                <div class="w-3/4 flex flex-col justify-between pr-2">
-                    <div class="flex text-xs font-bold border-b border-black">
-                        <div class="w-20 text-center">D55</div>
-                        <div class="w-24 text-center border-x border-black">JOB NO</div>
-                        <div class="flex-1 text-center">MARK</div>
-                    </div>
-                    <div class="flex items-center h-12">
-                        <div class="w-20 text-center text-lg font-bold">FINISH<br>GOOD</div>
-                        <div class="w-24 flex flex-col border-x border-black">
-                            <div class="flex-1 flex items-center justify-center border-b border-black">{{ $printData['label']->job_no }}</div>
-                            <div class="flex-1 flex items-center justify-center">-</div>
-                        </div>
-                        <div class="flex-1 text-2xl font-bold text-center">{{ $printData['label']->marking }}</div>
-                    </div>
-                    <div class="flex justify-center items-center mt-2">
-                        <div class="w-16 h-16 flex items-center justify-center">
-                            {!! $printData['qrCodes'][$i] !!}
-                        </div>
-                    </div>
-                </div>
-                <div class="w-1/4 flex flex-col items-center justify-between border-l border-black pl-2">
-                    <div class="text-[0.5rem] font-bold">QC PASS BY :</div>
-                    <div class="text-[0.5rem] font-bold border-y border-black w-full text-center py-1">{{ $printData['qcPass'] }}</div>
-                    <div class="text-[0.5rem] font-bold">QUALITY INSPECTOR</div>
-                </div>
-            </div>
-            <div class="text-[0.4rem] text-center border-t border-black pt-1 mt-1">FORM QC-001/PROS-SDI-QC-005/REV 1</div>
         </div>
     </div>
 @endfor
-</body>
-</html>
+</x-layout>

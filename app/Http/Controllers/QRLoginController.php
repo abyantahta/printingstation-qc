@@ -8,6 +8,7 @@ use App\Models\Piclabel;
 use Illuminate\Http\Request;
 use Spatie\LaravelPdf\Facades\Pdf;
 use Illuminate\Support\Facades\Log;
+use Spatie\Browsershot\Browsershot;
 
 class QRLoginController extends Controller
 {
@@ -163,7 +164,10 @@ class QRLoginController extends Controller
             // Generate PDF with Spatie Laravel PDF
             $filename = 'labels_' . $label->job_no . '_' . now()->format('Y-m-d_H-i-s') . '.pdf';
             return Pdf::view('pages.print-label-pdf', compact('printData'))
-                ->format('A4') // We'll set custom size in the view with @page CSS
+                // ->format('A4') // We'll set custom size in the view with @page CSS
+                ->withBrowsershot(fn (Browsershot $browsershot)=>
+                $browsershot->paperSize(width: 130, height: 85) // width and height in pixels
+                )
                 ->download($filename);
         } catch (\Exception $e) {
             Log::error('PDF Generation Error: ' . $e->getMessage());
