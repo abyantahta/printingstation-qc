@@ -13,10 +13,10 @@ class History extends Model
 
     public function qcpass()
     {
-        return $this->belongsTo(Line::class, 'id');
+        return $this->belongsTo(Qcpass::class, 'qcpass_id');
     }
     public function label()
     {
-        return $this->belongsTo(Line::class, 'id');
+        return $this->belongsTo(Label::class, 'label_id');
     }
 }

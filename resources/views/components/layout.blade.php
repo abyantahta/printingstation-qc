@@ -1640,6 +1640,9 @@
         .info-table {
             width: 100%;
         }
+        .info-table tr {
+            width: 100% !important;
+        }
         
         .info-table td {
             border-bottom: 1pt solid #000;
@@ -1656,21 +1659,27 @@
         }
         
         .info-label {
-            width: 35pt;
+            width: 22%;
             height: 18px;
-            border-right: 1pt solid #000;
+            border-right: none !important;
         }
         
         .info-value {
-            width: auto;
+            padding: 0 !important;
+            border-right: 1pt solid #000;
+            width: 78%;
             font-size: 20pt;
         }
         
         .info-table .quantity-table {
             width: 100%;
+            /* background-color: red; */
+        }
+        .info-table .quantity-table tr{
+            width: 100%;
         }
         
-        .quantity-table td {
+        .info-table .quantity-table td {
             font-weight: bold;
             font-size: 10px;
             vertical-align: middle;
@@ -1680,29 +1689,42 @@
             padding: 0pt 8pt !important;
             width: 88px;
             height: 10px;
+            border-right: none !important;
         }
-        .quantity-table td:last-child {
+        .row-quantity{
+            /* background-color: yellow; */
+            padding: 0 !important;
+        }
+        .info-table .quantity-table td:last-child {
             border-right: none;
         }
         
-        .quantity-text {
-            width: 84px;
+        #quantity-text {
+            /* padding: -20pt !important; */
+            /* background-color: yellow; */
+            padding: 0 !important;
+            margin: 0pt !important;
+            text-align: left !important;
+            width: 27%;
             border-bottom: none !important;
             border-left: none !important;
         }
-        
+        #quantity-text tr{
+            border-left: none !important;
+        }
         .unique-code {
-            width: 106px;
+            width: 31.5%;
             text-align: center;
             font-size: 14pt;
-            border-left: 1pt solid #000;
-            border-right: 1pt solid #000;
+            /* border-left: 1pt solid #000;
+            border-right: 1pt solid #000; */
             border-bottom: none !important;
         }
         
         .job-number {
-            width: 138px;
+            width: 40.5%;
             text-align: center;
+            /* border-right: 1pt solid #000 !important; */
             border-bottom: none !important;
             font-size: 7pt !important;
         }
@@ -1764,7 +1786,7 @@
         }
         
         .d55-cell {
-            width: 75px;
+            width: 60px;
             height: 10px;
             border-top:none !important;
             border-left:none !important;
@@ -1812,7 +1834,7 @@
         .mark-content {
             text-align: center;
             font-size: 14px !important;
-            line-height: 1.9 !important;
+            line-height: 2.5 !important;
         }
         
         .qr-section {
@@ -1847,7 +1869,7 @@
         
         .qc-table td {
             border: none;
-            padding: 2pt;
+            /* padding: 2pt; */
             font-weight: bold;
             font-size: 8px !important;
             vertical-align: middle;
