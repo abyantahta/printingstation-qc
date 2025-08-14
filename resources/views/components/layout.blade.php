@@ -1555,6 +1555,27 @@
             border: 2px solid #000;
             font-family: Arial, sans-serif;
         }
+        .HIJAU{
+            background-color: rgb(142, 244, 142);
+        }
+        .PINK{
+            background-color: rgb(248, 196, 205);
+        }
+        .ORANGE{
+            background-color: rgb(245, 198, 128);
+        }
+        .MERAH{
+            background-color: rgb(249, 157, 157);
+        }
+        .KUNING{
+            background-color: rgb(253, 253, 145);
+        }
+        .BIRU{
+            background-color: rgb(145, 215, 245);
+        }
+        .PUTIH{
+            background-color: white;
+        }
     </style>
     <style>
         body {

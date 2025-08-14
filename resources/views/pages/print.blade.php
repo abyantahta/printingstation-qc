@@ -55,7 +55,7 @@
         </div>
         <div class="w-3/4 shadow-xl h-96 mt-8 p-12 flex gap-12">
             <div class="w-1/2 h-full flex justify-center bg-green-50">
-                <div class="w-[30rem] h-[15.5rem] p-2 bg-white border-2">
+                <div class="w-[30rem] h-[15.5rem] {{ $label ? $label->warna_kertas : '-' }} p-2  border-2">
                     <div class="w-full h-12 flex  box-border outline-1">
                         <div class="w-3/4 h-full flex items-center justify-center outline-1">
                             <img class="h-full" src="{{ asset('storage/logosdi.png') }}" alt="logo"

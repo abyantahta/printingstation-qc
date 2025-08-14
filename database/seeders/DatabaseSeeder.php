@@ -9,6 +9,7 @@ use App\Models\Qcpass;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -105,42 +106,42 @@ class DatabaseSeeder extends Seeder
         Piclabel::factory()->create([
             'name'=> "NANDA MAULANA",
             'npk'=> 18140107,
-            'uniqueCode'=> 'Poporemo'
+            'uniqueCode'=> hash('sha256','NANDA MAULANA 18140107')
         ]);
         Piclabel::factory()->create([
             'name'=> "OKTO BERLIANDO",
             'npk'=> 18180230,
-            'uniqueCode'=> 'Poporemo'
+            'uniqueCode'=> hash('sha256','OKTO BERLIANDO 18180230')
         ]);
         Piclabel::factory()->create([
             'name'=> "TULUS IMAM RAMDHANI ",
             'npk'=> 18170215,
-            'uniqueCode'=> 'Poporemo'
+            'uniqueCode'=> hash('sha256','TULUS IMAM RAMDHANI 18170215')
         ]);
         Piclabel::factory()->create([
             'name'=> "AHMAD AKBAR",
             'npk'=> 1814083,
-            'uniqueCode'=> 'Poporemo'
+            'uniqueCode'=> hash('sha256','AHMAD AKBAR 1814083')
         ]);
         Piclabel::factory()->create([
             'name'=> "YAYANG ZIGO",
             'npk'=> 18190289,
-            'uniqueCode'=> 'Poporemo'
+            'uniqueCode'=> hash('sha256','YAYANG ZIGO 18190289')
         ]);
         Piclabel::factory()->create([
             'name'=> "TORRY MARYONO",
             'npk'=> 18190306,
-            'uniqueCode'=> 'Poporemo'
+            'uniqueCode'=> hash('sha256','TORRY MARYONO 18190306')
         ]);
         Piclabel::factory()->create([
             'name'=> "MUHAMMAD IQBAL",
             'npk'=> 18210344,
-            'uniqueCode'=> 'Poporemo'
+            'uniqueCode'=> hash('sha256','MUHAMMAD IQBAL 18210344')
         ]);
         Piclabel::factory()->create([
             'name'=> "ENDANG TEGAR",
             'npk'=> 18210365,
-            'uniqueCode'=> 'Poporemo'
+            'uniqueCode'=> hash('sha256','ENDANG TEGAR 18210365')
         ]);
 
         Line::factory()->create([
@@ -193,7 +194,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AX 1",
            'kode'=>"Y526",
            'marking'=>"XR",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>1
         ]);
         Label::factory()->create([
@@ -206,7 +207,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AX 8",
            'kode'=>"Y527",
            'marking'=>"XL",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>1
         ]);
         Label::factory()->create([
@@ -219,7 +220,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AX 2",
            'kode'=>"T322",
            'marking'=>"XFR",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>3
         ]);
         Label::factory()->create([
@@ -232,7 +233,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AX 5",
            'kode'=>"T323",
            'marking'=>"XFL",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>1
         ]);
         Label::factory()->create([
@@ -245,7 +246,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AX 3",
            'kode'=>"T324",
            'marking'=>"X3R",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -258,7 +259,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AX 6",
            'kode'=>"T325",
            'marking'=>"X3L",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -271,7 +272,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AX 4",
            'kode'=>"T359",
            'marking'=>"XRR",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -284,7 +285,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AX 7",
            'kode'=>"T360",
            'marking'=>"XRL",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -297,7 +298,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"TR 2",
            'kode'=>"-",
            'marking'=>"SR",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -310,7 +311,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"TR 4",
            'kode'=>"-",
            'marking'=>"SL",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -323,7 +324,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"TR 1",
            'kode'=>"-",
            'marking'=>"SFR",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -336,7 +337,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"TR 3",
            'kode'=>"-",
            'marking'=>"SFL",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -349,7 +350,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"RR 1",
            'kode'=>"-",
            'marking'=>"AFR",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -362,7 +363,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"RR 3",
            'kode'=>"-",
            'marking'=>"AFL",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -375,7 +376,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"RR 2",
            'kode'=>"-",
            'marking'=>"ARR",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -388,7 +389,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"RR 4",
            'kode'=>"-",
            'marking'=>"ARL",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -401,7 +402,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"RR 5",
            'kode'=>"-",
            'marking'=>"AR",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -414,7 +415,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"RR 6",
            'kode'=>"-",
            'marking'=>"AL",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -427,7 +428,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"GL 1",
            'kode'=>"-",
            'marking'=>"-",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"BIRU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -440,7 +441,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"GL 2",
            'kode'=>"-",
            'marking'=>"ORANGE",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"KUNING",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -453,7 +454,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"GL 3",
            'kode'=>"-",
            'marking'=>"PUTIH",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -466,7 +467,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"RR 7",
            'kode'=>"-",
            'marking'=>"KUNING",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"KUNING",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -479,7 +480,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"RR 8",
            'kode'=>"-",
            'marking'=>"UNGU",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"BIRU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -492,7 +493,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"RR 9",
            'kode'=>"-",
            'marking'=>"ORANGE",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"ORANGE",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -505,7 +506,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"RR 10",
            'kode'=>"-",
            'marking'=>"KUNING",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"KUNING",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -518,7 +519,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"RR 11",
            'kode'=>"-",
            'marking'=>"UNGU",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"BIRU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -531,7 +532,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"RR 12",
            'kode'=>"-",
            'marking'=>"ORANGE",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"ORANGE",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -544,7 +545,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"B027",
            'marking'=>"MERAH",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -557,7 +558,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"PUTIH",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -570,7 +571,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AA 7",
            'kode'=>"-",
            'marking'=>"J1",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -583,7 +584,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AA 8",
            'kode'=>"-",
            'marking'=>"J2",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -596,7 +597,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AA 9",
            'kode'=>"-",
            'marking'=>"J3",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PINK",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -609,7 +610,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AA 10",
            'kode'=>"-",
            'marking'=>"R5",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -622,7 +623,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AA 11",
            'kode'=>"-",
            'marking'=>"R6",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -635,7 +636,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AA 12",
            'kode'=>"-",
            'marking'=>"R7",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"KUNING",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -648,7 +649,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AA 13",
            'kode'=>"-",
            'marking'=>"R8",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"BIRU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -661,7 +662,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AA 14",
            'kode'=>"-",
            'marking'=>"R9",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"ORANGE",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -674,7 +675,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AA 1",
            'kode'=>"-",
            'marking'=>"JR1",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"BIRU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -687,7 +688,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AA 3",
            'kode'=>"-",
            'marking'=>"JL1",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"BIRU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -700,7 +701,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AA 2",
            'kode'=>"-",
            'marking'=>"JR2",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"BIRU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -713,7 +714,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AA 4",
            'kode'=>"-",
            'marking'=>"JL2",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"BIRU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -726,7 +727,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AA 5",
            'kode'=>"-",
            'marking'=>"JR3",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"BIRU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -739,7 +740,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"AA 6",
            'kode'=>"-",
            'marking'=>"JL3",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"BIRU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -752,7 +753,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"G",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"BIRU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -765,7 +766,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"H",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -778,7 +779,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"Z",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -791,7 +792,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"A",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -804,7 +805,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"C",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"BIRU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -817,7 +818,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"E",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -830,7 +831,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"YC 1",
            'kode'=>"4700",
            'marking'=>"NR",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -843,7 +844,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"YC 2",
            'kode'=>"4701",
            'marking'=>"NL",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -856,7 +857,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"299",
            'kode'=>"-",
            'marking'=>"F",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -869,7 +870,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"156",
            'kode'=>"-",
            'marking'=>"S",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -882,7 +883,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"200",
            'kode'=>"-",
            'marking'=>"-",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -895,7 +896,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"M0R",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -908,7 +909,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"M0L",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -921,7 +922,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"M0R",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -934,7 +935,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"M0L",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -947,7 +948,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"M0R",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -960,7 +961,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"M0L",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -973,7 +974,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"M0R",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -986,7 +987,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"M0L",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -999,7 +1000,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"M0R",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -1012,7 +1013,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"M0L",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -1025,7 +1026,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"M0R",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"HIJAU",
            'line_id'=>2
         ]);
         Label::factory()->create([
@@ -1038,7 +1039,7 @@ class DatabaseSeeder extends Seeder
            'kode_unik'=>"-",
            'kode'=>"-",
            'marking'=>"M0L",
-           'warna_kertas'=>"",
+           'warna_kertas'=>"PUTIH",
            'line_id'=>2
         ]);
     }

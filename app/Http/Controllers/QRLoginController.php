@@ -46,8 +46,8 @@ class QRLoginController extends Controller
         $explodedInput = explode('#',$input);
         // dd($explodedInput,count($explodedInput));
         if(count($explodedInput)==4){
-            if($explodedInput[0]=="QC" && $explodedInput[3]=="Poporemo"){
-                $isUserExist = Piclabel::where('name',$explodedInput[1])->where('npk',$explodedInput[2])->first();
+            if($explodedInput[0]=="QC"){
+                $isUserExist = Piclabel::where('uniqueCode',$explodedInput[3])->first();
                 // dd($isUserExist);
                 if(!$isUserExist){
                     return redirect()->back()->withErrors('User belum terdaftar');
