@@ -1681,7 +1681,7 @@
         }
         
         .info-label {
-            width: 22% !important;
+            width: 24% !important;
             height: 18px;
             border-right: none !important;
         }
@@ -1689,7 +1689,7 @@
         .info-value {
             padding: 0 !important;
             border-right: 1pt solid #000;
-            width: 78% !important;
+            width: 76% !important;
             font-size: 20pt;
         }
         /* .info-value:nth-child() */
@@ -1818,7 +1818,7 @@
         }
         
         .job-cell {
-            width: 54px;
+            width: 62px;
             height: 10px;
             border-top:none !important;
             text-align: center;
@@ -1827,7 +1827,7 @@
         
         .mark-cell {
             text-align: center;
-            width: 65px;
+            width: 67px;
             height: 10px;
             border-top:none !important;
             border-right: 1px solid black;
@@ -1861,7 +1861,7 @@
         }
         
         .qr-section {
-            width: 111px;
+            width: 108px;
         }
         
         .qr-container {
