@@ -53,12 +53,12 @@
             {{-- <input class="bg-green-200 w-full pl-12 rounded-md placeholder:italic placeholder:text-xl " placeholder="Scan Barcode RFID..." type="text"> --}}
             {{-- </div> --}}
         </div>
-        <div class=" w-full lg:w-3/4 shadow-xl h-96 mt-8 p-12 flex gap-12">
+        <div class=" w-full lg:w-4/5 shadow-xl h-96 mt-8 p-12 flex gap-12">
             <div class="w-1/2 h-full flex justify-center ">
                 <div class="w-[30rem] h-[15.5rem] lg {{ $label ? $label->warna_kertas : '-' }} p-2  border-2">
                     <div class="w-full h-12 flex  box-border outline-1">
                         <div class="w-3/4 h-full flex items-center justify-center outline-1">
-                            <img class="h-full" src="storage/logosdi" alt="logo"
+                            <img class="h-full" src="storage/logosdi.png" alt="logo"
                                 class="" />
                         </div>
                         <div class="w-1/4 h-full flex items-center justify-center font-bold">TAG LABEL</div>
@@ -87,13 +87,13 @@
                                         <tr class="flex w-full  ">
                                             <td class="h-6 flex items-center  w-22 pl-2 ">QUANTITY</td>
                                             <td class="h-6 flex items-center  grow ">
-                                                <div class="w-[29.5%]  h-full flex items-center ">:
+                                                <div class="w-[25.4%]  h-full flex items-center ">:
                                                     {{ $label ? $label->qty . ' pcs' : '-' }}</div>
                                                 <div
-                                                    class="w-[36.5%] text-lg h-full flex items-center justify-center   border-l-1 border-r-1">
+                                                    class="w-[31.2%] text-lg h-full flex items-center justify-center   border-l-1 border-r-1">
                                                     {{ $label ? $label->kode_unik : '-' }}</div>
                                                 <div
-                                                    class="w-[34%]  h-full  flex items-center justify-center text-[0.60rem]">
+                                                    class="w-[42%]  h-full  flex items-center justify-center text-[0.60rem]">
                                                     {{ $qr_value ? $qr_value . '001' : '-' }}</div>
                                             </td>
                                         </tr>
@@ -155,7 +155,7 @@
                     {{-- <div class="w-full h-4 bg-red-400"></div> --}}
                 </div>
             </div>
-            <div class="w-1/2 flex flex-col gap-y-4">
+            <div class="flex-1/3 flex flex-col gap-y-4">
                 <form action="{{ route('update.shift') }}" method="POST" class="w-full">
                     @csrf
                     <select required class="border-3 rounded-md h-12 pl-8 w-full" name="shift" id="shift">
@@ -186,7 +186,7 @@
                     </div>
                     <button id="submitBtn" type="submit"
                         class="mt-4 font-bold border-2 h-12 rounded-sm w-full transition-all duration-200"
-                        disabled>Download PDF</button>
+                        disabled>Print</button>
                 </form>
             </div>
         </div>
