@@ -94,7 +94,7 @@
                                                     {{ $label ? $label->kode_unik : '-' }}</div>
                                                 <div
                                                     class="w-[42%]  h-full  flex items-center justify-center text-[0.60rem]">
-                                                    {{ $qr_value ? $qr_value . '001' : '-' }}</div>
+                                                    {{ $qr_value ? $qr_value . '-001' : '-' }}</div>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -179,15 +179,35 @@
                 </form>
                 <form action="{{ route('print.label') }}" method="POST" class="w-full" id="printForm">
                     @csrf
+
                     <div class="flex gap-4 h-10">
-                        <input name="quantity" id="quantity" placeholder="0"
+                        {{-- <input name="quantity" id="quantity" placeholder="0"
                             class="border-3 bg-white rounded-md font-bold text-center placeholder:text-xl text-xl w-full"
-                            type="number" min="1" value="{{ session('print_quantity', '') }}" required>
+                            type="number" min="1" value="{{ session('print_quantity', '') }}" required> --}}
+                            <select required class="border-3 rounded-md h-12 pl-8 w-full" name="quantity" id="quantity">
+                                <option class="" value="{{ session('print_quantity', '') }}">Quantity</option>
+                                @for($i = 1; $i <= 60; $i++)
+                                    <option class="" value={{$i}} {{ $shift == $i ? 'selected' : '' }}>{{$i}}</option>
+                                @endfor
+                            </select>
                     </div>
+                    
+                    
                     <button id="submitBtn" type="submit"
                         class="mt-4 font-bold border-2 h-12 rounded-sm w-full transition-all duration-200"
                         disabled>Print</button>
                 </form>
+
+                {{-- <form action="{{ route('update.shift') }}" method="POST" class="w-full">
+                    @csrf
+                    <select required class="border-3 rounded-md h-12 pl-8 w-full" name="shift" id="shift">
+                        <option class="" value="">Pilih Shift</option>
+                        <option class="" value="A" {{ $shift == 'A' ? 'selected' : '' }}>A</option>
+                        <option class="" value="B" {{ $shift == 'B' ? 'selected' : '' }}>B</option>
+                        <option class="" value="C" {{ $shift == 'C' ? 'selected' : '' }}>C</option>
+                    </select>
+                </form> --}}
+
             </div>
         </div>
     </div>
