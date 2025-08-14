@@ -135,7 +135,9 @@
 
                                     </div>
                                 </div>
-                                <div class="w-[8.3rem]  h-full "></div>
+                                <div class="w-[8.3rem] flex items-center justify-center h-full ">
+                                    {!! $label? '<img class="w-14 h-14" src="storage/qricon.png" alt="logo" class="" />': '' !!}
+                                </div>
                             </div>
                             <div class="w-1/4  h-full flex flex-col outline-1">
                                 <div class="w-full flex items-center justify-center h-5  text-[0.5rem] font-bold">QC

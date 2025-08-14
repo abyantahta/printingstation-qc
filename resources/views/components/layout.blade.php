@@ -1601,7 +1601,7 @@
             border: 2px solid #000;
             box-sizing: border-box;
             page-break-after: always;
-            color: rgba(0, 0, 0, 0.696) !important;
+            color: rgba(0, 0, 0, 0.938) !important;
         }
         
         .label-outer:last-child {
