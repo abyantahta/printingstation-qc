@@ -1680,7 +1680,7 @@
         }
         
         .info-label {
-            width: 22%;
+            width: 25%;
             height: 18px;
             border-right: none !important;
         }
@@ -1688,7 +1688,7 @@
         .info-value {
             padding: 0 !important;
             border-right: 1pt solid #000;
-            width: 78%;
+            width: 75%;
             font-size: 20pt;
         }
         
