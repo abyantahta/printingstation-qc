@@ -1601,6 +1601,7 @@
             border: 2px solid #000;
             box-sizing: border-box;
             page-break-after: always;
+            color: rgba(0, 0, 0, 0.696) !important;
         }
         
         .label-outer:last-child {
@@ -1680,7 +1681,7 @@
         }
         
         .info-label {
-            width: 25%;
+            width: 22%;
             height: 18px;
             border-right: none !important;
         }
@@ -1688,7 +1689,7 @@
         .info-value {
             padding: 0 !important;
             border-right: 1pt solid #000;
-            width: 75%;
+            width: 78%;
             font-size: 20pt;
         }
         
