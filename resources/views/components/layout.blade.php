@@ -1681,7 +1681,7 @@
         }
         
         .info-label {
-            width: 22%;
+            width: 22% !important;
             height: 18px;
             border-right: none !important;
         }
@@ -1689,9 +1689,10 @@
         .info-value {
             padding: 0 !important;
             border-right: 1pt solid #000;
-            width: 78%;
+            width: 78% !important;
             font-size: 20pt;
         }
+        /* .info-value:nth-child() */
         
         .info-table .quantity-table {
             width: 100%;
