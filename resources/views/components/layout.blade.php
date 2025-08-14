@@ -1559,10 +1559,10 @@
             background-color: rgb(142, 244, 142);
         }
         .PINK{
-            background-color: rgb(248, 196, 205);
+            background-color: rgb(251, 212, 219);
         }
         .ORANGE{
-            background-color: rgb(245, 198, 128);
+            background-color: rgb(241, 183, 96);
         }
         .MERAH{
             background-color: rgb(249, 157, 157);

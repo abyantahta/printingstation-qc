@@ -2,7 +2,7 @@
     {{-- <h1 class="bg-red-400">halo semuanya</h1> --}}
     <div class="w-full flex flex-col items-center pt-12 ">
         
-        <div class="w-full flex flex-col items-center">
+        <div class="w-full flex flex-col items-center ">
             <div class="flex gap-2 mb-2">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
@@ -26,7 +26,7 @@
                 {{-- <img src="" alt=""> --}}
                 @if ($errors->any())
             
-                    <div class="bg-red-400 mb-3 md:px-16 md:text-base flex flex-col md:flex-row items-center justify-center gap-1  py-2 px-8 rounded-md font-bold text-white text-sm"
+                    <div class=" mb-3 md:px-16 md:text-base flex flex-col md:flex-row items-center justify-center gap-1  py-2 px-8 rounded-md font-bold text-white text-sm"
                         role="alert">
                         {{ $errors->first() }}
                     </div>
@@ -42,7 +42,7 @@
 
 
 
-                <img class="w-12 h-12" src="{{ asset('storage/qricon.png') }}" alt="logo" class="" />
+                <img class="w-12 h-12" src="storage/qricon.png" alt="logo" class="" />
                 <input placeholder="Scan Barcode RFID..." type="text" placeholder="Scan Barcode RFID..."
                     class="bg-green-200 w-full pl-12 rounded-md placeholder:italic placeholder:text-xl" id="barcode"
                     name="barcode" readonly onfocus="this.removeAttribute('readonly');" required autofocus>
@@ -53,12 +53,12 @@
             {{-- <input class="bg-green-200 w-full pl-12 rounded-md placeholder:italic placeholder:text-xl " placeholder="Scan Barcode RFID..." type="text"> --}}
             {{-- </div> --}}
         </div>
-        <div class="w-3/4 shadow-xl h-96 mt-8 p-12 flex gap-12">
+        <div class=" w-full lg:w-3/4 shadow-xl h-96 mt-8 p-12 flex gap-12">
             <div class="w-1/2 h-full flex justify-center bg-green-50">
-                <div class="w-[30rem] h-[15.5rem] {{ $label ? $label->warna_kertas : '-' }} p-2  border-2">
+                <div class="w-[30rem] h-[15.5rem] lg {{ $label ? $label->warna_kertas : '-' }} p-2  border-2">
                     <div class="w-full h-12 flex  box-border outline-1">
                         <div class="w-3/4 h-full flex items-center justify-center outline-1">
-                            <img class="h-full" src="{{ asset('storage/logosdi.png') }}" alt="logo"
+                            <img class="h-full" src="storage/logosdi" alt="logo"
                                 class="" />
                         </div>
                         <div class="w-1/4 h-full flex items-center justify-center font-bold">TAG LABEL</div>
@@ -84,16 +84,16 @@
                                             <td class="h-6 flex items-center  grow ">:
                                                 {{ $shift ? $shift . date('ymd') : '-' }}</td>
                                         </tr>
-                                        <tr class="flex w-full   ">
+                                        <tr class="flex w-full  ">
                                             <td class="h-6 flex items-center  w-22 pl-2 ">QUANTITY</td>
                                             <td class="h-6 flex items-center  grow ">
-                                                <div class="w-[4.1rem] h-full flex items-center ">:
+                                                <div class="w-[29.5%]  h-full flex items-center ">:
                                                     {{ $label ? $label->qty . ' pcs' : '-' }}</div>
                                                 <div
-                                                    class="w-20 text-lg h-full flex items-center justify-center   border-l-1 border-r-1">
+                                                    class="w-[36.5%] text-lg h-full flex items-center justify-center   border-l-1 border-r-1">
                                                     {{ $label ? $label->kode_unik : '-' }}</div>
                                                 <div
-                                                    class="w-28 h-full  flex items-center justify-center text-[0.60rem]">
+                                                    class="w-[34%]  h-full  flex items-center justify-center text-[0.60rem]">
                                                     {{ $qr_value ? $qr_value . '001' : '-' }}</div>
                                             </td>
                                         </tr>
@@ -103,10 +103,12 @@
                             <div class="w-1/4">
                                 <div
                                     class="w-full h-[4.5rem]  flex items-center justify-center text-5xl font-black outline-none">
-                                    OK</div>
+                                    OK
+                                </div>
                                 <div
                                     class="w-full h-6  font-bold text-[0.6rem] flex items-center justify-center border-t-1 border-l-1">
-                                    DATE : {{ date('d/m/Y') }}</div>
+                                    DATE : {{ date('d/m/Y') }}
+                                </div>
                             </div>
                         </div>
                         <div class=" flex h-[4.3rem] w-full">

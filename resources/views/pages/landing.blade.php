@@ -13,7 +13,7 @@
             <h1 class=" font-bold text-[5rem] -mt-10"><span class="text-green-700">Quality Control</span> Label</h1>
         </div>
         <div class="">
-            <img class="h-[15rem] overflow-hidden" src="{{ asset('storage/heroImage.png') }}" alt="logo" class="" />
+            <img class="h-[15rem] overflow-hidden" src='storage/heroImage.png' alt="logo" class="" />
             {{-- <div class=" w-full h-64 bg-[url('/storage/heroImage.png')] bg-green-100"></div> --}}
         </div>
         <div class="">
@@ -25,7 +25,7 @@
                     {{-- <input type="text" class="form-control" id="barcode" name="barcode" readonly  required autofocus> --}}
                     {{-- <div class="flex"> --}}
 
-                        <img class="w-12 h-12" src="{{ asset('storage/qricon.png') }}" alt="logo" class="" />
+                        <img class="w-12 h-12" src='storage/qricon.png' alt="logo" class="" />
                         <input type="text" placeholder="Scan Barcode RFID..."
                         class="bg-green-200 w-1/2 h-full pl-6 rounded-md placeholder:italic placeholder:text-xl"
                         id="barcode" name="barcode" readonly onfocus="this.removeAttribute('readonly');" required
