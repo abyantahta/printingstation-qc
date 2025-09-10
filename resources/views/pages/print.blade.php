@@ -43,7 +43,7 @@
 
 
                 <img class="w-12 h-12" src="storage/qricon.png" alt="logo" class="" />
-                <input placeholder="Scan Barcode RFID..." type="text" placeholder="Scan Barcode RFID..."
+                <input placeholder="Scan Barcode Label..." type="text" placeholder="Scan Barcode Label..."
                     class="bg-green-200 w-full pl-12 rounded-md placeholder:italic placeholder:text-xl" id="barcode"
                     name="barcode" readonly onfocus="this.removeAttribute('readonly');" required autofocus>
                 {{-- </div> --}}
@@ -213,6 +213,7 @@
             </div>
         </div>
     </div>
+    <!-- <button id="printBtn" class="bg-red-400 cursor-pointer p-4">Print Now</button> -->
 
     <script>
         function validateForm() {
@@ -269,6 +270,67 @@
             }
         });
     </script>
+
+<script src="{{ asset('js/qz-tray.js') }}"></script>
+<!-- <script>
+    // 1. Set up certificate and signature promises (runs once)
+    qz.security.setCertificatePromise(() => {
+        return fetch("/api/get-certificate")
+            .then(res => res.text());
+    });
+
+    qz.security.setSignaturePromise(toSign => {
+        return fetch("/api/sign-message", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ request: toSign })
+        })
+        .then(res => res.text());
+    });
+
+    // 2. Define the print function
+    function doPrint() {
+    console.log("Starting print process...");
+
+    qz.websocket.connect()
+  .then(() => {return qz.printers.find()})
+  .then(printers => console.log("Available printers:", printers))
+  .catch(console.error);
+
+
+    qz.websocket.connect()
+        .then(() => {
+            console.log("Connected to QZ Tray");
+            return qz.printers.find(); // get all printers
+        })
+        .then(printers => {
+            console.log("Available printers:", printers);
+
+            const targetPrinter = printers.find(p => p.includes("EPSON L210"));
+            if (!targetPrinter) {
+                throw new Error("Target printer not found. Check the list above.");
+            }
+
+            console.log("Using printer:", targetPrinter);
+
+            let config = qz.configs.create(targetPrinter);
+            let data = [{ type: 'raw', format: 'plain', data: 'Hello Printer\n' }];
+
+            console.log("Sending data:", data);
+            return qz.print(config, data);
+        })
+        .then(() => {
+            console.log("Print job sent successfully");
+        })
+        .catch(err => {
+            console.error("Error during print process:", err);
+        });
+}
+
+        // 3. Attach the function to the button
+        document.getElementById('printBtn').addEventListener('click', doPrint);
+    </script> -->
+
 </x-layout>
 
 {{-- <div class="label-page">

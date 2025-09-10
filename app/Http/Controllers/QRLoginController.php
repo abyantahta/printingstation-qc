@@ -10,7 +10,12 @@ use App\Models\Qcpass;
 use Illuminate\Http\Request;
 use Spatie\LaravelPdf\Facades\Pdf;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Browsershot\Browsershot;
+use Rawilk\Printing\Facades\Printing;
+use Illuminate\Support\Facades\Http;
+use Rawilk\Printing\Api\PrintNode\Client;
+
 
 class QRLoginController extends Controller
 {
@@ -75,7 +80,7 @@ class QRLoginController extends Controller
             $jobNo = substr($input,0,strlen($input)-4);
             $isLabelExist = Label::where('job_no',$jobNo)->first();
             if(!$isLabelExist){
-                dd('halo');
+                // dd('halo');
                 return redirect()->back()->withErrors('Label tidak ditemukan');
             }
             $label = $isLabelExist;
@@ -190,12 +195,82 @@ class QRLoginController extends Controller
             
             // Generate PDF with Spatie Laravel PDF
             $filename = 'labels_' . $label->job_no . '_' . now()->format('Y-m-d_H-i-s') . '.pdf';
-            return Pdf::view('pages.print-label-pdf', compact('printData'))
-                // ->format('A4') // We'll set custom size in the view with @page CSS
-                ->withBrowsershot(fn (Browsershot $browsershot)=>
-                $browsershot->paperSize(width: 130, height: 85) // width and height in pixels
-                )
-                ->download($filename);
+            // 1. Make sure the target folder exists
+            $savePath = storage_path('app/public/test.pdf');
+
+            // 2. Try with a very simple HTML snippet
+                Browsershot::html(view('pages.print-label-pdf', compact('printData'))->render())
+                ->timeout(60000)
+                ->paperSize(130, 85, 'mm') // 144x89mm in millimeters
+                // ->margins(0, 0, 0, 0) // No margins
+                ->dismissDialogs() // Dismiss any browser dialogs
+                ->waitUntilNetworkIdle() // Wait for network to be idle
+                ->savePdf(storage_path("app/public/labels/label-print.pdf"));
+
+                // $pdfUrl = Storage::disk('public')->url("labels/{$filename}");
+                // $pdfUrl = "http://printingstation-qc.test:8080/storage/labels/{$filename}";
+                // dd($pdfUrl);
+                // return redirect()->route('auto.print', ['file' => $pdfUrl]);
+                
+                $printerId = 74702562   ; // atau ID printer dari NodePrint/PrintNode
+                // $printers = Printing::printers(); // ini akan return Collection of Printer objects
+
+
+// $client = new Client('2zPogBrB_NqpGugpRZ8lcRXqCEYqwfebxzuk6i0PoKI');
+// $printers = $client->printers();
+
+
+
+                $apiKey = '2zPogBrB_NqpGugpRZ8lcRXqCEYqwfebxzuk6i0PoKI';
+                $response = Http::withBasicAuth($apiKey, 'printnode')->get('https://api.printnode.com/printers');
+
+                // dd($response->json());
+
+                // dd($printers);
+                
+                // Printing::newPrintTask()
+                //     ->printer($printerId)
+                //     ->file(storage_path("app/public/labels/label-print.pdf"))
+                //     ->send();
+
+                $pdfBase64 = base64_encode(file_get_contents(storage_path("app/public/labels/label-print.pdf")));
+
+// $response = Http::withBasicAuth($apiKey, '')
+//     ->post('https://api.printnode.com/printjobs', [
+//         'printerId' => $printerId,
+//         'title' => 'Label Print',
+//         'contentType' => 'pdf_base64',
+//         'content' => $pdfBase64,
+//         'source' => 'LaravelApp',
+//     ]);
+$response = Http::withBasicAuth($apiKey, '')
+    ->post('https://api.printnode.com/printjobs', [
+        'printerId' => $printerId,
+        'title' => 'Label Print',
+        'contentType' => 'pdf_base64',
+        'content' => $pdfBase64,
+        'source' => 'LaravelApp',
+        'options' => [
+            'fit_to_page' => false, // Prevent scaling
+            // 'paper' => 'Custom.100x89mm', // Custom paper size
+            'scale' => 100, // 100% scale - no scaling
+            'auto_rotate' => false, // Prevent auto rotation
+            'auto_center' => false, // Prevent auto centering
+        ],
+    ]);
+
+
+dd($response->json());
+
+
+                return redirect()->back()->with('success', 'Printing successfully');
+
+
+            // return Pdf::view('pages.print-label-pdf', compact('printData'))
+            //     ->withBrowsershot(fn (Browsershot $browsershot)=>
+            //     $browsershot->paperSize(width: 130, height: 85)
+            //     )
+            //     ->download($filename);
         } catch (\Exception $e) {
             Log::error('PDF Generation Error: ' . $e->getMessage());
             Log::error('Stack trace: ' . $e->getTraceAsString());
