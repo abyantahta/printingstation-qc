@@ -197,7 +197,8 @@ class QRLoginController extends Controller
             $filename = 'labels_' . $label->job_no . '_' . now()->format('Y-m-d_H-i-s') . '.pdf';
             // 1. Make sure the target folder exists
             $savePath = storage_path('app/public/test.pdf');
-
+// before ->savePdf(...)
+                \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('labels', 0775, true);
             // 2. Try with a very simple HTML snippet
                 Browsershot::html(view('pages.print-label-pdf', compact('printData'))->render())
                 ->timeout(60000)
