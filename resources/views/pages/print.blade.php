@@ -16,8 +16,14 @@
                             class="bg-orange-400 py-1 px-2 font-bold rounded-md text-white cursor-pointer">Reset
                             Label</button>
                         </form>
-                        @endif
-                    </div>
+                @endif
+                <form action="" method="POST">
+                        @csrf
+                        <button type="submit"
+                            class="bg-blue-400 py-1 px-2 font-bold rounded-md text-white cursor-pointer">History
+                            </button>
+                </form>
+            </div>
                     <p class="bg-yellow-200 py-1 px-2 text-2xl font-bold inline-block rounded-md">Welcome, {{ $username }} !
             </p>
             <h1 class=" font-bold text-[5rem] -mt-5">Scan Label</h1>
@@ -187,9 +193,9 @@
                             class="border-3 bg-white rounded-md font-bold text-center placeholder:text-xl text-xl w-full"
                             type="number" min="1" value="{{ session('print_quantity', '') }}" required> --}}
                             <select required class="border-3 rounded-md h-12 pl-8 w-full" name="quantity" id="quantity">
-                                <option class="" value="{{ session('print_quantity', '') }}">Quantity</option>
+                                <option class="" value="" {{ session('print_quantity') ? '' : 'selected' }}>Quantity</option>
                                 @for($i = 1; $i <= 60; $i++)
-                                    <option class="" value={{$i}} {{ $shift == $i ? 'selected' : '' }}>{{$i}}</option>
+                                    <option class="" value="{{ $i }}" {{ (string)session('print_quantity') === (string)$i ? 'selected' : '' }}>{{ $i }}</option>
                                 @endfor
                             </select>
                     </div>
@@ -214,6 +220,17 @@
         </div>
     </div>
     <!-- <button id="printBtn" class="bg-red-400 cursor-pointer p-4">Print Now</button> -->
+
+    {{-- Print status modal --}}
+    <div id="printStatusModal" class="fixed w-full h-lvh inset-0 bg-black-200 items-center justify-center hidden">
+        <div class="w-full h-lvh bg-[rgba(0,0,0,0.4)]">
+            <div class="bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md shadow-lg p-6 w-80 text-center">
+                <div id="printStatusTitle" class="text-lg font-bold mb-2">Status</div>
+                <div id="printStatusMessage" class="mb-4">Message</div>
+                <button id="printStatusClose" class="cursor-pointer px-4 py-2 bg-blue-500 text-white rounded-md">OK</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         function validateForm() {
@@ -254,7 +271,39 @@
                 this.form.submit();
             });
 
-            document.getElementById('quantity').addEventListener('input', validateForm);
+            document.getElementById('quantity').addEventListener('change', validateForm);
+
+            // Modal logic
+            const modal = document.getElementById('printStatusModal');
+            const title = document.getElementById('printStatusTitle');
+            const message = document.getElementById('printStatusMessage');
+            const closeBtn = document.getElementById('printStatusClose');
+
+            // Status from backend
+            const printStatus = "{{ session('print_status') }}";
+
+            function openModal(t, m) {
+                title.textContent = t;
+                message.textContent = m;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+
+            function closeModal() {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+
+            closeBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', function(e){
+                if (e.target === modal) closeModal();
+            });
+
+            if (printStatus === 'success') {
+                openModal('Success', 'Print Job Has Sent');
+            } else if (printStatus === 'error') {
+                openModal('Error', 'Print Error');
+            }
         });
 
         // Prevent form submission if validation fails
