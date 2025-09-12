@@ -10,15 +10,23 @@ use Illuminate\Support\Facades\Route;
 //     return view('pages.print');
 // });
 
-Route::post('/login/store', [QRLoginController::class, 'store'])->name('login.store');
-Route::post('/label/find', [QRLoginController::class, 'findLabel'])->name('label.find');
-Route::post('/logout', [QRLoginController::class, 'logout'])->name('logout');
-Route::post('/reset-session', [QRLoginController::class, 'resetSession'])->name('reset.session');
-Route::post('/update-qc-pass', [QRLoginController::class, 'updateQcPass'])->name('update.qc.pass');
-Route::post('/update-shift', [QRLoginController::class, 'updateShift'])->name('update.shift');
-Route::post('/print-label', [QRLoginController::class, 'printLabel'])->name('print.label');
+// Public routes (no authentication required)
 Route::get('/', [QRLoginController::class, 'index'])->name('index');
-Route::get('/print', [QRLoginController::class, 'printIndex'])->name('print');
+Route::post('/login/store', [QRLoginController::class, 'store'])->name('login.store');
+
+// Protected routes (require QR code authentication)
+Route::middleware('qrauth')->group(function () {
+    Route::get('/print', [QRLoginController::class, 'printIndex'])->name('print');
+    Route::get('/history', [QRLoginController::class, 'history'])->name('history');
+    Route::post('/label/find', [QRLoginController::class, 'findLabel'])->name('label.find');
+    Route::post('/reset-session', [QRLoginController::class, 'resetSession'])->name('reset.session');
+    Route::post('/update-qc-pass', [QRLoginController::class, 'updateQcPass'])->name('update.qc.pass');
+    Route::post('/update-shift', [QRLoginController::class, 'updateShift'])->name('update.shift');
+    Route::post('/print-label', [QRLoginController::class, 'printLabel'])->name('print.label');
+});
+
+// Logout route (accessible to authenticated users)
+Route::post('/logout', [QRLoginController::class, 'logout'])->name('logout');
 Route::get('/auto-print', function (Illuminate\Http\Request $request) {
     // $pdfUrl = $request->query('file');
     $pdfUrl = urldecode($request->query('file'));

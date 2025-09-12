@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CurrentUser;
 use App\Models\History;
 use App\Models\Label;
 use App\Models\Piclabel;
@@ -19,20 +18,33 @@ use Rawilk\Printing\Api\PrintNode\Client;
 
 class QRLoginController extends Controller
 {
+    /**
+     * Check if user is authenticated via session
+     */
+    private function isAuthenticated()
+    {
+        return session('user_logged_in') && session('user_data');
+    }
+    
+    /**
+     * Get current user data from session
+     */
+    private function getCurrentUser()
+    {
+        return session('user_data');
+    }
     public function index(){
-        $isCurrentUser = CurrentUser::first();
-        if($isCurrentUser){
+        // Check if user is logged in via session
+        if($this->isAuthenticated()){
             return redirect()->route('print');
         }
         return view('pages.landing');
     }
 
     public function printIndex(){
-        $isCurrentUser = CurrentUser::first();
-        if(!$isCurrentUser){
-            return redirect()->route('index');
-        }
-        $username = $isCurrentUser->name;
+        // User is already authenticated by middleware
+        $userData = $this->getCurrentUser();
+        $username = $userData['name'];
         $qc_pass = Qcpass::all();
         // Get label data from session
         $label = session('label_data');
@@ -57,10 +69,22 @@ class QRLoginController extends Controller
                 if(!$isUserExist){
                     return redirect()->back()->withErrors('User belum terdaftar');
                 }
-                CurrentUser::create([
-                    'name'=>$isUserExist->name,
-                    'npk'=>$isUserExist->npk,
+                
+                // Store user data in session instead of database
+                session([
+                    'user_logged_in' => true,
+                    'user_data' => [
+                        'name' => $isUserExist->name,
+                        'npk' => $isUserExist->npk,
+                        'uniqueCode' => $isUserExist->uniqueCode,
+                        'login_time' => now(),
+                        'session_id' => session()->getId()
+                    ]
                 ]);
+                
+                // Regenerate session ID for security
+                session()->regenerate();
+                
                 return redirect()->route('print');
             }else{
                 return redirect()->back()->withErrors('Format tidak sesuai, silahkan scan ulang dengan format yang sesuai !');
@@ -72,6 +96,7 @@ class QRLoginController extends Controller
     }
 
     public function findLabel(Request $request){
+        // User is already authenticated by middleware
         $input = trim($request->input('barcode'));
         $label = null;
         $qrValue = null;
@@ -108,6 +133,7 @@ class QRLoginController extends Controller
     }
 
     public function resetSession(){
+        // User is already authenticated by middleware
         session()->forget('label_data');
         session()->forget('qc_pass');
         session()->forget('qr_value');
@@ -118,18 +144,21 @@ class QRLoginController extends Controller
     }
 
     public function updateQcPass(Request $request){
+        // User is already authenticated by middleware
         $qcPass = $request->input('qc_pass');
         session(['qc_pass' => $qcPass]);
         return redirect()->route('print');
     }
 
     public function updateShift(Request $request){
+        // User is already authenticated by middleware
         $shift = $request->input('shift');
         session(['shift' => $shift]);
         return redirect()->route('print');
     }
 
     public function printLabel(Request $request){
+        // User is already authenticated by middleware
         try {
             $quantity = $request->input('quantity');
             $label = session('label_data');
@@ -157,12 +186,19 @@ class QRLoginController extends Controller
             // Generate lot number
             $lotNo = $shift ? now()->format('ymd') : '-';
             
+            // Get current user for tracking who printed from session
+            $userData = $this->getCurrentUser();
+            $printedBy = $userData ? $userData['name'] : 'Unknown';
+            
             // Save history record
-            History::create([
+            $historyRecord = History::create([
                 'qcpass_id' => $qcPassRecord->id,
                 'label_id' => $label->id,
                 'lot_no' => $shift.$lotNo,
-                'quantity' => $quantity
+                'quantity' => $quantity,
+                'printed_by' => $printedBy,
+                'shift' => $shift,
+                'print_status' => 'pending'
             ]);
             
             // Generate QR codes for each label using SVG format (no ImageMagick required)
@@ -262,8 +298,18 @@ $response = Http::withBasicAuth($apiKey, '')
     ]);
 
                 if ($response->successful()) {
+                    // Update history record with success status
+                    $historyRecord->update([
+                        'print_status' => 'success'
+                    ]);
                     return redirect()->back()->with('print_status', 'success');
                 }
+
+                // Update history record with error status
+                $historyRecord->update([
+                    'print_status' => 'error',
+                    'error_message' => 'PrintNode API Error: ' . $response->status() . ' - ' . $response->body()
+                ]);
 
                 Log::error('PrintNode error response', [
                     'status' => $response->status(),
@@ -278,6 +324,14 @@ $response = Http::withBasicAuth($apiKey, '')
             //     )
             //     ->download($filename);
         } catch (\Exception $e) {
+            // Update history record with error status if it exists
+            if (isset($historyRecord)) {
+                $historyRecord->update([
+                    'print_status' => 'error',
+                    'error_message' => 'PDF Generation Error: ' . $e->getMessage()
+                ]);
+            }
+            
             Log::error('PDF Generation Error: ' . $e->getMessage());
             Log::error('Stack trace: ' . $e->getTraceAsString());
             return redirect()->back()->withErrors('Error generating PDF: ' . $e->getMessage());
@@ -286,9 +340,21 @@ $response = Http::withBasicAuth($apiKey, '')
 
 
 
+    public function history(){
+        // User is already authenticated by middleware
+        // Get all history records with related data
+        $histories = History::with(['qcpass', 'label'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+            
+        return view('pages.history', compact('histories'));
+    }
+
     public function logout(){
-        CurrentUser::query()->delete();
-        return redirect()->route('index');
+        // Clear all session data and regenerate session ID for security
+        session()->flush();
+        session()->regenerate();
+        return redirect()->route('index')->with('success', 'You have been logged out successfully.');
     }
     //
 }

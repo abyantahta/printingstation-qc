@@ -7,6 +7,13 @@
                 {!! $errors->first() !!}
             </div>
         @endif
+        
+        @if (session('success'))
+            <div class="bg-green-400 mb-3 md:px-16 -mt-12  md:text-base flex flex-col md:flex-row items-center justify-center gap-1  py-2 px-8 rounded-md font-bold text-white text-sm"
+                role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="font-inria pl-28">
             <p class="bg-yellow-200 py-1 px-2 text-2xl font-bold inline-block rounded-md">SANKEI DHARMA INDONESIA</p>
             <h1 class=" font-bold text-[5rem] -mt-5">Printing Station for</h1>

@@ -10,6 +10,17 @@ class History extends Model
     /** @use HasFactory<\Database\Factories\HistoryFactory> */
     use HasFactory;
     protected $guarded = [];
+    
+    protected $fillable = [
+        'qcpass_id',
+        'label_id',
+        'lot_no',
+        'quantity',
+        'printed_by',
+        'shift',
+        'print_status',
+        'error_message'
+    ];
 
     public function qcpass()
     {

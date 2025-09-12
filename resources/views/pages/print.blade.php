@@ -17,12 +17,9 @@
                             Label</button>
                         </form>
                 @endif
-                <form action="" method="POST">
-                        @csrf
-                        <button type="submit"
-                            class="bg-blue-400 py-1 px-2 font-bold rounded-md text-white cursor-pointer">History
-                            </button>
-                </form>
+                <a href="{{ route('history') }}"
+                    class="bg-blue-400 py-1 px-2 font-bold rounded-md text-white cursor-pointer no-underline inline-block">History
+                </a>
             </div>
                     <p class="bg-yellow-200 py-1 px-2 text-2xl font-bold inline-block rounded-md">Welcome, {{ $username }} !
             </p>
@@ -32,7 +29,7 @@
                 {{-- <img src="" alt=""> --}}
                 @if ($errors->any())
             
-                    <div class=" mb-3 md:px-16 md:text-base flex flex-col md:flex-row items-center justify-center gap-1  py-2 px-8 rounded-md font-bold text-white text-sm"
+                    <div class=" mb-3 md:px-16 md:text-base bg-red-400 flex flex-col md:flex-row items-center justify-center gap-1  py-2 px-8 rounded-md font-bold text-white text-sm"
                         role="alert">
                         {{ $errors->first() }}
                     </div>
