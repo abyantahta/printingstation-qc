@@ -249,7 +249,7 @@ class QRLoginController extends Controller
                 // dd($pdfUrl);
                 // return redirect()->route('auto.print', ['file' => $pdfUrl]);
                 
-                $printerId = 7470256   ; // atau ID printer dari NodePrint/PrintNode
+                $printerId = 74714351    ; // atau ID printer dari NodePrint/PrintNode
                 // $printerId = 74702562   ; // atau ID printer dari NodePrint/PrintNode
                 // $printers = Printing::printers(); // ini akan return Collection of Printer objects
 
