@@ -40,7 +40,7 @@
                     {{-- </div> --}}
                 {{-- </div> --}}
             </form>
-            {{-- <input class="bg-green-200 w-1/2 pl-6 rounded-md placeholder:italic placeholder:text-xl " placeholder="Scan Barcode RFID..." type="text"> --}}
+            {{-- <input class="bg-green-200 text-transparent w-1/2 pl-6 rounded-md placeholder:italic placeholder:text-xl " placeholder="Scan Barcode RFID..." type="text"> --}}
         </div>
     </div>
 </x-layout>

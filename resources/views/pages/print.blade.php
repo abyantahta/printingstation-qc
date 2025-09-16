@@ -200,7 +200,16 @@
                     
                     <button id="submitBtn" type="submit"
                         class="mt-4 font-bold border-2 h-12 rounded-sm w-full transition-all duration-200"
-                        disabled>Print</button>
+                        disabled>
+                        <span id="printText">Print</span>
+                        <span id="printSpinner" class="hidden">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Preparing...
+                        </span>
+                    </button>
                 </form>
 
                 {{-- <form action="{{ route('update.shift') }}" method="POST" class="w-full">
@@ -225,6 +234,22 @@
                 <div id="printStatusTitle" class="text-lg font-bold mb-2">Status</div>
                 <div id="printStatusMessage" class="mb-4">Message</div>
                 <button id="printStatusClose" class="cursor-pointer px-4 py-2 bg-blue-500 text-white rounded-md">OK</button>
+            </div>
+        </div>
+    </div>
+
+    {{-- Loading modal --}}
+    <div id="loadingModal" class="fixed w-full h-lvh inset-0 bg-black-200 items-center justify-center hidden">
+        <div class="w-full h-lvh bg-[rgba(0,0,0,0.4)]">
+            <div class="bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md shadow-lg p-6 w-80 text-center">
+                <div class="flex flex-col items-center">
+                    <svg class="animate-spin h-12 w-12 text-blue-500 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <div class="text-lg font-bold mb-2">Preparing...</div>
+                    <div class="text-sm text-gray-600">Please wait while we process your print job</div>
+                </div>
             </div>
         </div>
     </div>
@@ -275,6 +300,7 @@
             const title = document.getElementById('printStatusTitle');
             const message = document.getElementById('printStatusMessage');
             const closeBtn = document.getElementById('printStatusClose');
+            const loadingModal = document.getElementById('loadingModal');
 
             // Status from backend
             const printStatus = "{{ session('print_status') }}";
@@ -291,19 +317,29 @@
                 modal.classList.remove('flex');
             }
 
+            function hideLoadingModal() {
+                loadingModal.classList.add('hidden');
+                loadingModal.classList.remove('flex');
+            }
+
             closeBtn.addEventListener('click', closeModal);
             modal.addEventListener('click', function(e){
                 if (e.target === modal) closeModal();
             });
 
+            // Hide loading modal on page load (in case it was left open from previous request)
+            hideLoadingModal();
+
             if (printStatus === 'success') {
+                hideLoadingModal();
                 openModal('Success', 'Print Job Has Sent');
             } else if (printStatus === 'error') {
+                hideLoadingModal();
                 openModal('Error', 'Print Error');
             }
         });
 
-        // Prevent form submission if validation fails
+        // Prevent form submission if validation fails and handle loading state
         document.getElementById('printForm').addEventListener('submit', function(e) {
             const shift = document.getElementById('shift').value;
             const qcPass = document.getElementById('qc_pass').value;
@@ -314,6 +350,24 @@
                 alert('Please fill in all required fields: Shift, QC Pass, and Quantity (must be greater than 0)');
                 return false;
             }
+
+            // Show loading state
+            const submitBtn = document.getElementById('submitBtn');
+            const printText = document.getElementById('printText');
+            const printSpinner = document.getElementById('printSpinner');
+            const loadingModal = document.getElementById('loadingModal');
+            
+            // Disable button and show loading spinner
+            submitBtn.disabled = true;
+            printText.classList.add('hidden');
+            printSpinner.classList.remove('hidden');
+            
+            // Update button styling for loading state
+            submitBtn.className = 'mt-4 font-bold border-2 h-12 rounded-sm w-full transition-all duration-200 bg-blue-500 cursor-not-allowed text-white';
+            
+            // Show loading modal
+            loadingModal.classList.remove('hidden');
+            loadingModal.classList.add('flex');
         });
     </script>
 
