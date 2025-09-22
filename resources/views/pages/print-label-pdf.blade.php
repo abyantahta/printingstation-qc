@@ -26,10 +26,17 @@
                                                 <td class="info-label">PART NO</td>
                                                 <td class="info-value">: {{$printData['label']->part_no}}</td>
                                             </tr>
+                                            @if(str_contains(strtoupper($printData['label']->part_name), 'RH'))
+                                            <tr style="">
+                                                <td class="info-label">PART NAME</td>
+                                                <td style="background-color: black; color: white;">: {{$printData['label']->part_name}}</td>
+                                            </tr>
+                                            @else
                                             <tr>
                                                 <td class="info-label">PART NAME</td>
                                                 <td class="info-value">: {{$printData['label']->part_name}}</td>
                                             </tr>
+                                            @endif
                                             <tr>
                                                 <td class="info-label">LOT NO</td>
                                                 <td class="info-value">: {{$printData['shift'].$printData['lotNo']}}</td>

@@ -79,8 +79,13 @@
                                         </tr>
                                         <tr class="flex w-full  outline-1">
                                             <td class="h-6 flex items-center  w-22 pl-2 ">PART NAME</td>
+                                            @if(str_contains(strtoupper($label->part_name), 'RH'))
+                                            <td class="h-6 flex items-center bg-black text-white font-bold text-[0.63rem]  grow ">:
+                                            {{ $label ? $label->part_name : '-' }}</td>
+                                            @else
                                             <td class="h-6 flex items-center font-bold text-[0.63rem]  grow ">:
                                                 {{ $label ? $label->part_name : '-' }}</td>
+                                            @endif
                                         </tr>
                                         <tr class="flex w-full outline-1  ">
                                             <td class="h-6 flex items-center  w-22 pl-2 ">LOT NO</td>

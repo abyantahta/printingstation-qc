@@ -111,8 +111,9 @@ class QRLoginController extends Controller
             $label = $isLabelExist;
             $qrValue = $jobNo;
         }
-        else if(strlen($input)==17||strlen($input)==18||strlen($input)==17||strlen($input)==20){
+        else if(strlen($input)==17||strlen($input)==18||strlen($input)==19||strlen($input)==20){
             $partNo = substr($input,0,strlen($input)-3);
+            // dd($partNo);
             $isLabelExist = Label::where('part_no',$partNo)->first();
             if(!$isLabelExist){
                 return redirect()->back()->withErrors('Label tidak ditemukan');
@@ -239,9 +240,11 @@ class QRLoginController extends Controller
                 Browsershot::html(view('pages.print-label-pdf', compact('printData'))->render())
                 ->timeout(60000)
                 ->paperSize(130, 85, 'mm') // 144x89mm in millimeters
-                // ->margins(0, 0, 0, 0) // No margins
+                ->margins(0, 0, 0, 0) // No margins
                 ->dismissDialogs() // Dismiss any browser dialogs
                 ->waitUntilNetworkIdle() // Wait for network to be idle
+                ->emulateMedia('print') // Emulate print media
+                ->showBackground() // Show background colors and images
                 ->savePdf(storage_path("app/public/labels/label-print.pdf"));
 
                 // $pdfUrl = Storage::disk('public')->url("labels/{$filename}");
@@ -249,7 +252,7 @@ class QRLoginController extends Controller
                 // dd($pdfUrl);
                 // return redirect()->route('auto.print', ['file' => $pdfUrl]);
                 
-                $printerId = 74714351    ; // atau ID printer dari NodePrint/PrintNode
+                $printerId = 74714351; // atau ID printer dari NodePrint/PrintNode
                 // $printerId = 74702562   ; // atau ID printer dari NodePrint/PrintNode
                 // $printers = Printing::printers(); // ini akan return Collection of Printer objects
 
