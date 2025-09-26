@@ -29,7 +29,7 @@
                                             @if(str_contains(strtoupper($printData['label']->part_name), 'RH'))
                                             <tr style="">
                                                 <td class="info-label">PART NAME</td>
-                                                <td style="background-color: black; color: white;">: {{$printData['label']->part_name}}</td>
+                                                <td class="info-value" style="background-color: black; color: white;">: {{$printData['label']->part_name}}</td>
                                             </tr>
                                             @else
                                             <tr>
