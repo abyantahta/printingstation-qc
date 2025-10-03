@@ -14,13 +14,13 @@
                 </table>
                 
                 <!-- Content -->
-                <table class="content-table">
+                <table style="padding:0px" class="content-table">
                     <tr>
                         <td>
                             <!-- Info Section --> 
-                            <table style="width: 100%; padding:0;">
-                                <tr style="width: 100%">
-                                    <td style="width: 75%;height:100%"> 
+                            <table style="width: 100%; padding:0px;">
+                                <tr style="width: 100%;padding:0px">
+                                    <td style="width: 75.5%;height:100%;padding:0px;"> 
                                         <table class="info-table">
                                             <tr>
                                                 <td class="info-label">PART NO</td>
@@ -41,6 +41,7 @@
                                                 <td class="info-label">LOT NO</td>
                                                 <td class="info-value">: {{$printData['shift'].$printData['lotNo']}}</td>
                                             </tr>
+                                                
                                             <tr>
                                                 {{-- <td class="info-label">LOT NO</td> --}}
                                                 <td class="quantity-label">QUANTITY</td>
@@ -49,7 +50,7 @@
                                                         <tr>
                                                             <td style="margin-left: -10px" id="quantity-text">: {{$printData['label']->qty}} pcs</td>
                                                             <td class="unique-code">{{$printData['label']->kode_unik}}</td>
-                                                            @if(strlen($printData['qrValue'])==4 || strlen($printData['qrValue'])==5 ||strlen($printData['qrValue'])==6 ||strlen($printData['qrValue'])==7 ||strlen($printData['qrValue'])==8)
+                                                            @if(strlen($printData['qrValue'])==3 || strlen($printData['qrValue'])==4 || strlen($printData['qrValue'])==5 ||strlen($printData['qrValue'])==6 ||strlen($printData['qrValue'])==7 ||strlen($printData['qrValue'])==8)
                                                             <td class="job-number">{{ $printData['qrValue']."-".str_pad($i+1, 3, '0', STR_PAD_LEFT) }}</td>
                                                             @else
                                                             <td class="job-number">{{ $printData['qrValue'].str_pad($i+1, 3, '0', STR_PAD_LEFT) }}</td>
@@ -62,7 +63,7 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="width: 25%;height:100%">
+                                    <td style="width: 24.5%;height:100%;">
                                         <table class="status-table">
                                             <tr>
                                                 <td class="ok-status">OK</td>
@@ -76,19 +77,19 @@
                             </table>
                             
                             <!-- Bottom Section -->
-                            <table class="bottom-table">
+                            <table style="" class="bottom-table">
                                 <tr>
                                     <td class="left-section">
                                         <table style="width: 100%;">
                                             <tr style="">
                                                 <td style="">
-                                                    <table class="grid-table">
+                                                    <table class="grid-table" style=" ;height:70px;">
                                                         <tr style="">
                                                             <td class="d55-cell">{{$printData['label']->model}}</td>
                                                             <td class="job-cell">JOB NO</td>
                                                             <td class="mark-cell">MARK</td>
                                                         </tr>
-                                                        <tr>
+                                                        <tr style="">
                                                             <td class="finish-good">FINISH<br>GOOD</td>
                                                             <td style="padding: 0;">
                                                                 <table style="width: 100%;">

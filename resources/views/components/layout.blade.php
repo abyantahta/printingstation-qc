@@ -1654,6 +1654,7 @@
         .content-table {
             width: 100%;
             border: 1px solid #000;
+            
         }
         
         .content-table td {
@@ -1661,11 +1662,15 @@
         
         .info-table {
             width: 100%;
+        	
         }
         .info-table tr {
             width: 100% !important;
+        	
         }
-        
+        .info-table{
+        	margin-top : -2pt !important;
+        }
         .info-table td {
             border-bottom: 1pt solid #000;
             padding: 4pt 8pt;
@@ -1769,13 +1774,13 @@
         }
         
         .ok-status {
-            height: 76px;
+            height: 63px !important;
             font-weight: 900;
             font-size: 48px;
         }
         
         .date-section {
-            height: 26.5px;
+            height: 26.5px !important;
             font-weight: bold;
             font-size: 7pt;
             border-top: 1pt solid #000;
@@ -1793,7 +1798,7 @@
         }
         
         .left-section {
-            width: 74.9%;
+            width: 75.4%;
         
         }
         
@@ -1810,7 +1815,7 @@
         
         .d55-cell {
             width: 60px;
-            height: 10px;
+            height: 15px !important;
             border-top:none !important;
             border-left:none !important;
             border-right: 1px solid black;
@@ -1819,7 +1824,7 @@
         
         .job-cell {
             width: 62px;
-            height: 10px;
+            height: 15px !important;
             border-top:none !important;
             text-align: center;
             border-right: 1px solid black;
@@ -1828,7 +1833,7 @@
         .mark-cell {
             text-align: center;
             width: 67px;
-            height: 10px;
+            height: 15px !important;
             border-top:none !important;
             border-right: 1px solid black;
         }
@@ -1867,7 +1872,7 @@
         .qr-container {
             vertical-align: middle;
             text-align: center;
-            height: 67px;
+            height: 70px;
             border-bottom: 1px solid black;
             margin: 0 auto;
             padding: 5px 0;
