@@ -7,7 +7,7 @@
                 <table class="header-table">
                     <tr>
                         <td class="logo-cell">
-                            <img src="{{ asset('storage/logosdi.png') }}" alt="logo" />
+                            <img src="{{ public_path('storage/logosdi.png') }}" alt="logo" />
                         </td>
                         <td class="title-cell">TAG LABEL</td>
                     </tr>

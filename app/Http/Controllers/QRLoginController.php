@@ -100,7 +100,7 @@ class QRLoginController extends Controller
         $input = trim($request->input('barcode'));
         $label = null;
         $qrValue = null;
-        if(strlen($input) == 8 ||strlen($input) == 9 ||strlen($input) == 10 ||strlen($input) == 11){
+        if(strlen($input) == 7 ||strlen($input) == 8 ||strlen($input) == 9 ||strlen($input) == 10 ||strlen($input) == 11){
             
             $jobNo = substr($input,0,strlen($input)-4);
             $isLabelExist = Label::where('job_no',$jobNo)->first();
