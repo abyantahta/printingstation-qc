@@ -6,6 +6,7 @@ use App\Models\History;
 use App\Models\Label;
 use App\Models\Piclabel;
 use App\Models\Qcpass;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Spatie\LaravelPdf\Facades\Pdf;
 use Illuminate\Support\Facades\Log;
@@ -113,13 +114,25 @@ class QRLoginController extends Controller
         }
         else if(strlen($input)==17||strlen($input)==18||strlen($input)==19||strlen($input)==20){
             $partNo = substr($input,0,strlen($input)-3);
-            // dd($partNo);
             $isLabelExist = Label::where('part_no',$partNo)->first();
             if(!$isLabelExist){
                 return redirect()->back()->withErrors('Label tidak ditemukan');
             }
             $label = $isLabelExist;
             $qrValue = $partNo;
+        }
+        //KHUSUS UNTUK  DCWA EXPORT
+        else if(strlen($input)==28 && preg_match('/^\d{5}-[A-Z]{2}\d{3}-\d{2}-[A-Z]{2}\d{3}#[A-Z0-9]{7}$/', $input)){
+            $partNo = substr($input,0,17);
+            $isLabelExist = Label::where('part_no',$partNo)->first();
+            // dd($partNo, $isLabelExist);
+            if(!$isLabelExist){
+                return redirect()->back()->withErrors('Label tidak ditemukan');
+            }
+            $label = $isLabelExist;
+            $qrValue = $partNo;
+            // dd($input,$partNo);
+            
         }
         else{
             // dd('halo2');
@@ -129,6 +142,7 @@ class QRLoginController extends Controller
         // Save label data to session
         session(['label_data' => $label]);
         session(['qr_value' => $qrValue]);
+        // session(['lotNo' => $lotNo]);
         
         return redirect()->route('print');
     }
@@ -210,10 +224,16 @@ class QRLoginController extends Controller
                 if($qr_value == $label->job_no){
                     $qr = $label->job_no;
                     $qrValue = $label->job_no . "-" . str_pad($i + 1, 3, '0', STR_PAD_LEFT);
-                }else if($qr_value == $label->part_no){
+                }else if($qr_value == $label->part_no && $qr_value == "25051-BZ190-00-KZ"){
+                    $qr = $label->part_no;
+                    $qrValue = $label->part_no . str_pad($i + 1, 3, '0', STR_PAD_LEFT) . "#" . $shift . date('ymd');
+                }
+                else if($qr_value == $label->part_no){
+                    // dd($qr_value == $label->part_no,$qrValue,$label->part_no);
                     $qr = $label->part_no;
                     $qrValue = $label->part_no . str_pad($i + 1, 3, '0', STR_PAD_LEFT);
                 }
+                // dd($qrValue);
                 $qrCodes[] = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')->size(100)->generate($qrValue);
             }
             
