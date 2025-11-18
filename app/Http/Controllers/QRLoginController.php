@@ -255,7 +255,7 @@ class QRLoginController extends Controller
             // 1. Make sure the target folder exists
             $savePath = storage_path('app/public/test.pdf');
 // before ->savePdf(...)
-                \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('labels', 0775, true);
+                \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('labels');
             // 2. Try with a very simple HTML snippet
                 Browsershot::html(view('pages.print-label-pdf', compact('printData'))->render())
                 ->timeout(60000)
@@ -285,8 +285,14 @@ class QRLoginController extends Controller
 
                 // $apiKey = 'jBhNNDE4oXXhZ1MbfvB99GFSddFN4HqDvjH9y28t__c';
                 $apiKey = 'um2d2TZoQ9PSALFymVYmHgOqmXVWjCQ-p8exbhUv8Ss';
+                $apiPassword = env('PRINTNODE_PASSWORD', '');
                 // $apiKey = '2zPogBrB_NqpGugpRZ8lcRXqCEYqwfebxzuk6i0PoKI';
-                $response = Http::withBasicAuth($apiKey, 'printnode')->get('https://api.printnode.com/printers');
+                $httpClient = Http::withBasicAuth($apiKey, $apiPassword)
+                    ->timeout(60) // total request timeout
+                    ->connectTimeout(10) // fail faster on connection issues
+                    ->retry(3, 500); // simple retry to ride out transient hiccups
+
+                $response = $httpClient->get('https://api.printnode.com/printers');
 
                 // dd($response->json());
 
@@ -307,7 +313,7 @@ class QRLoginController extends Controller
 //         'content' => $pdfBase64,
 //         'source' => 'LaravelApp',
 //     ]);
-$response = Http::withBasicAuth($apiKey, '')
+$response = $httpClient
     ->post('https://api.printnode.com/printjobs', [
         'printerId' => $printerId,
         'title' => 'Label Print',
