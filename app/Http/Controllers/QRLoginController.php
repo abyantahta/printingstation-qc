@@ -229,17 +229,13 @@ class QRLoginController extends Controller
                     $qrValue = $label->part_no . str_pad($i + 1, 3, '0', STR_PAD_LEFT) . "#" . $shift . date('ymd');
                 }
                 else if($qr_value == $label->part_no){
-                    // dd($qr_value == $label->part_no,$qrValue,$label->part_no);
                     $qr = $label->part_no;
                     $qrValue = $label->part_no . str_pad($i + 1, 3, '0', STR_PAD_LEFT);
                 }
-                // dd($qrValue);
                 $qrCodes[] = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')->size(100)->generate($qrValue);
             }
             
-            // Generate print data
             $printData = [
-                // 'label' => $label,
                 'label' => $label,
                 'quantity' => $quantity,
                 'qcPass' => $qcPass,
@@ -254,7 +250,6 @@ class QRLoginController extends Controller
             $filename = 'labels_' . $label->job_no . '_' . now()->format('Y-m-d_H-i-s') . '.pdf';
             // 1. Make sure the target folder exists
             $savePath = storage_path('app/public/test.pdf');
-// before ->savePdf(...)
                 \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('labels');
             // 2. Try with a very simple HTML snippet
                 Browsershot::html(view('pages.print-label-pdf', compact('printData'))->render())
@@ -267,95 +262,55 @@ class QRLoginController extends Controller
                 ->showBackground() // Show background colors and images
                 ->savePdf(storage_path("app/public/labels/label-print.pdf"));
 
-                // $pdfUrl = Storage::disk('public')->url("labels/{$filename}");
-                // $pdfUrl = "http://printingstation-qc.test:8080/storage/labels/{$filename}";
-                // dd($pdfUrl);
-                // return redirect()->route('auto.print', ['file' => $pdfUrl]);
                 
-                $printerId = 74916451 ; // atau ID printer dari NodePrint/PrintNode
-                // $printerId = 74806109; // atau ID printer dari NodePrint/PrintNode
-                // $printerId = 74702562   ; // atau ID printer dari NodePrint/PrintNode
-                // $printers = Printing::printers(); // ini akan return Collection of Printer objects
+                // $printerId = 74916451 ; // atau ID printer dari NodePrint/PrintNode
+                // $apiKey = 'um2d2TZoQ9PSALFymVYmHgOqmXVWjCQ-p8exbhUv8Ss';
+                // $apiPassword = env('PRINTNODE_PASSWORD', '');
+                // $httpClient = Http::withBasicAuth($apiKey, $apiPassword)
+                //     ->timeout(60) // total request timeout
+                //     ->connectTimeout(10) // fail faster on connection issues
+                //     ->retry(3, 500); // simple retry to ride out transient hiccups
 
+                // $response = $httpClient->get('https://api.printnode.com/printers');
+                // $pdfBase64 = base64_encode(file_get_contents(storage_path("app/public/labels/label-print.pdf")));
 
-// $client = new Client('2zPogBrB_NqpGugpRZ8lcRXqCEYqwfebxzuk6i0PoKI');
-// $printers = $client->printers();
-
-
-
-                // $apiKey = 'jBhNNDE4oXXhZ1MbfvB99GFSddFN4HqDvjH9y28t__c';
-                $apiKey = 'um2d2TZoQ9PSALFymVYmHgOqmXVWjCQ-p8exbhUv8Ss';
-                $apiPassword = env('PRINTNODE_PASSWORD', '');
-                // $apiKey = '2zPogBrB_NqpGugpRZ8lcRXqCEYqwfebxzuk6i0PoKI';
-                $httpClient = Http::withBasicAuth($apiKey, $apiPassword)
-                    ->timeout(60) // total request timeout
-                    ->connectTimeout(10) // fail faster on connection issues
-                    ->retry(3, 500); // simple retry to ride out transient hiccups
-
-                $response = $httpClient->get('https://api.printnode.com/printers');
-
-                // dd($response->json());
-
-                // dd($printers);
-                
-                // Printing::newPrintTask()
-                //     ->printer($printerId)
-                //     ->file(storage_path("app/public/labels/label-print.pdf"))
-                //     ->send();
-
-                $pdfBase64 = base64_encode(file_get_contents(storage_path("app/public/labels/label-print.pdf")));
-
-// $response = Http::withBasicAuth($apiKey, '')
+// $response = $httpClient
 //     ->post('https://api.printnode.com/printjobs', [
 //         'printerId' => $printerId,
 //         'title' => 'Label Print',
 //         'contentType' => 'pdf_base64',
 //         'content' => $pdfBase64,
 //         'source' => 'LaravelApp',
+//         'options' => [
+//             'fit_to_page' => false, // Prevent scaling
+//             'scale' => 100, // 100% scale - no scaling
+//             'auto_rotate' => false, // Prevent auto rotation
+//             'auto_center' => false, // Prevent auto centering
+//         ],
 //     ]);
-$response = $httpClient
-    ->post('https://api.printnode.com/printjobs', [
-        'printerId' => $printerId,
-        'title' => 'Label Print',
-        'contentType' => 'pdf_base64',
-        'content' => $pdfBase64,
-        'source' => 'LaravelApp',
-        'options' => [
-            'fit_to_page' => false, // Prevent scaling
-            // 'paper' => 'Custom.100x89mm', // Custom paper size
-            'scale' => 100, // 100% scale - no scaling
-            'auto_rotate' => false, // Prevent auto rotation
-            'auto_center' => false, // Prevent auto centering
-        ],
-    ]);
 
-                if ($response->successful()) {
-                    // Update history record with success status
-                    $historyRecord->update([
-                        'print_status' => 'success'
-                    ]);
-                    return redirect()->back()->with('print_status', 'success');
-                }
+                // if ($response->successful()) {
+                //     // Update history record with success status
+                //     $historyRecord->update([
+                //         'print_status' => 'success'
+                //     ]);
+                //     return redirect()->back()->with('print_status', 'success');
+                // }
 
-                // Update history record with error status
-                $historyRecord->update([
-                    'print_status' => 'error',
-                    'error_message' => 'PrintNode API Error: ' . $response->status() . ' - ' . $response->body()
-                ]);
+                // // Update history record with error status
+                // $historyRecord->update([
+                //     'print_status' => 'error',
+                //     'error_message' => 'PrintNode API Error: ' . $response->status() . ' - ' . $response->body()
+                // ]);
 
-                Log::error('PrintNode error response', [
-                    'status' => $response->status(),
-                    'body' => $response->body(),
-                ]);
-                return redirect()->back()->with('print_status', 'error');
+                // Log::error('PrintNode error response', [
+                //     'status' => $response->status(),
+                //     'body' => $response->body(),
+                // ]);
+                // return redirect()->back()->with('print_status', 'error');
 
-
-            // return Pdf::view('pages.print-label-pdf', compact('printData'))
-            //     ->withBrowsershot(fn (Browsershot $browsershot)=>
-            //     $browsershot->paperSize(width: 130, height: 85)
-            //     )
-            //     ->download($filename);
-        } catch (\Exception $e) {
+        } 
+        catch (\Exception $e) {
             // Update history record with error status if it exists
             if (isset($historyRecord)) {
                 $historyRecord->update([
