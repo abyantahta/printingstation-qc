@@ -11,11 +11,11 @@
                                 <tr>
 
                                     <td style="width:25%;height:100%;display:inline-block;height:100%;">
-                                        <img style="width: 50px;height:50px;margin:0 auto;" src="{{ public_path('storage/logosdi2.png') }}" alt="logo" />
+                                        <img class="imgLabelBaru" style="width: 50px;height:50px" src="{{ public_path('storage/logosdi2.png') }}" alt="logo" />
                                     </td>
                                     <td style="width:18%;height:100%;display:inline-block;height:100%;text-align:center;border-left:1px solid black;">
                                         <table style="height:100%">
-                                            <tr style="height:15%;background-color: #adaaaa;padding:0 2px;"><td>ID SUPPLIER</td></tr>
+                                            <tr style="height:15%;background-color: #adaaaa;font-size:11px"><td>ID SUPPLIER</td></tr>
                                             <tr style="height:85%;font-size:15px"><td>300268</td></tr>
                                         </table>
                                     </td>

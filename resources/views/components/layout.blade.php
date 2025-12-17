@@ -1947,6 +1947,9 @@
             font-size: 13px;
             font-weight: bold;
         }
+        .imgLabelBaru{
+            margin: 0 auto;
+        }
     </style>
 
 </head>
