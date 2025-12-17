@@ -1883,8 +1883,8 @@
             height: 100%;
         }
         .rev-qr-container svg {
-            width: 60px;
-            height: 60px;
+            width: 55px;
+            height: 55px;
             margin: 0 auto;
         }
         
@@ -1949,6 +1949,7 @@
         }
         .imgLabelBaru{
             margin: 0 auto;
+            margin-left: 30px;
         }
     </style>
 
