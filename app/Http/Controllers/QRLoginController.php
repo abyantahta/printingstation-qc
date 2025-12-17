@@ -54,8 +54,9 @@ class QRLoginController extends Controller
         $qcPass = session('qc_pass');
         $shift = session('shift');
         $qr_value = session('qr_value');
+        $labelTemplate = session('label_template', 'new'); // Default to 'new' template
         
-        return view('pages.print', compact('qc_pass','username', 'label', 'qcPass','shift','qr_value'));
+        return view('pages.print', compact('qc_pass','username', 'label', 'qcPass','shift','qr_value','labelTemplate'));
     }
 
     public function store(Request $request){
@@ -155,6 +156,7 @@ class QRLoginController extends Controller
         session()->forget('shift');
         session()->forget('print_quantity');
         session()->forget('print_data');
+        // Note: label_template is intentionally NOT reset so user keeps their preference
         return redirect()->route('print');
     }
 
@@ -169,6 +171,13 @@ class QRLoginController extends Controller
         // User is already authenticated by middleware
         $shift = $request->input('shift');
         session(['shift' => $shift]);
+        return redirect()->route('print');
+    }
+
+    public function updateTemplate(Request $request){
+        // User is already authenticated by middleware
+        $template = $request->input('label_template');
+        session(['label_template' => $template]);
         return redirect()->route('print');
     }
 
@@ -249,10 +258,14 @@ class QRLoginController extends Controller
             // Generate PDF with Spatie Laravel PDF
             $filename = 'labels_' . $label->job_no . '_' . now()->format('Y-m-d_H-i-s') . '.pdf';
             // 1. Make sure the target folder exists
-            $savePath = storage_path('app/public/test.pdf');
-                \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('labels');
-            // 2. Try with a very simple HTML snippet
-                Browsershot::html(view('pages.rev-print-label-pdf', compact('printData'))->render())
+            \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('labels');
+            
+            // 2. Select template based on session (old or new)
+            $labelTemplate = session('label_template', 'new');
+            $pdfView = $labelTemplate === 'old' ? 'pages.print-label-pdf' : 'pages.rev-print-label-pdf';
+            
+            // 3. Generate PDF with selected template
+            Browsershot::html(view($pdfView, compact('printData'))->render())
                 ->timeout(60000)
                 ->paperSize(130, 85, 'mm') // 144x89mm in millimeters
                 ->margins(0, 0, 0, 0) // No margins
@@ -263,51 +276,51 @@ class QRLoginController extends Controller
                 ->savePdf(storage_path("app/public/labels/label-print.pdf"));
 
                 
-                // $printerId = 74916451 ; // atau ID printer dari NodePrint/PrintNode
-                // $apiKey = 'um2d2TZoQ9PSALFymVYmHgOqmXVWjCQ-p8exbhUv8Ss';
-                // $apiPassword = env('PRINTNODE_PASSWORD', '');
-                // $httpClient = Http::withBasicAuth($apiKey, $apiPassword)
-                //     ->timeout(60) // total request timeout
-                //     ->connectTimeout(10) // fail faster on connection issues
-                //     ->retry(3, 500); // simple retry to ride out transient hiccups
+                $printerId = 75003363 ; // atau ID printer dari NodePrint/PrintNode
+                $apiKey = 'ODaYP6oCHSW2T6vvZeqtT01ETsn8UICoOuAxIPLLY6k';
+                $apiPassword = env('PRINTNODE_PASSWORD', '');
+                $httpClient = Http::withBasicAuth($apiKey, $apiPassword)
+                    ->timeout(60) // total request timeout
+                    ->connectTimeout(10) // fail faster on connection issues
+                    ->retry(3, 500); // simple retry to ride out transient hiccups
 
-                // $response = $httpClient->get('https://api.printnode.com/printers');
-                // $pdfBase64 = base64_encode(file_get_contents(storage_path("app/public/labels/label-print.pdf")));
+                $response = $httpClient->get('https://api.printnode.com/printers');
+                $pdfBase64 = base64_encode(file_get_contents(storage_path("app/public/labels/label-print.pdf")));
 
-// $response = $httpClient
-//     ->post('https://api.printnode.com/printjobs', [
-//         'printerId' => $printerId,
-//         'title' => 'Label Print',
-//         'contentType' => 'pdf_base64',
-//         'content' => $pdfBase64,
-//         'source' => 'LaravelApp',
-//         'options' => [
-//             'fit_to_page' => false, // Prevent scaling
-//             'scale' => 100, // 100% scale - no scaling
-//             'auto_rotate' => false, // Prevent auto rotation
-//             'auto_center' => false, // Prevent auto centering
-//         ],
-//     ]);
+$response = $httpClient
+    ->post('https://api.printnode.com/printjobs', [
+        'printerId' => $printerId,
+        'title' => 'Label Print',
+        'contentType' => 'pdf_base64',
+        'content' => $pdfBase64,
+        'source' => 'LaravelApp',
+        'options' => [
+            'fit_to_page' => false, // Prevent scaling
+            'scale' => 100, // 100% scale - no scaling
+            'auto_rotate' => false, // Prevent auto rotation
+            'auto_center' => false, // Prevent auto centering
+        ],
+    ]);
 
-                // if ($response->successful()) {
-                //     // Update history record with success status
-                //     $historyRecord->update([
-                //         'print_status' => 'success'
-                //     ]);
-                //     return redirect()->back()->with('print_status', 'success');
-                // }
+                if ($response->successful()) {
+                    // Update history record with success status
+                    $historyRecord->update([
+                        'print_status' => 'success'
+                    ]);
+                    return redirect()->back()->with('print_status', 'success');
+                }
 
-                // // Update history record with error status
-                // $historyRecord->update([
-                //     'print_status' => 'error',
-                //     'error_message' => 'PrintNode API Error: ' . $response->status() . ' - ' . $response->body()
-                // ]);
+                // Update history record with error status
+                $historyRecord->update([
+                    'print_status' => 'error',
+                    'error_message' => 'PrintNode API Error: ' . $response->status() . ' - ' . $response->body()
+                ]);
 
-                // Log::error('PrintNode error response', [
-                //     'status' => $response->status(),
-                //     'body' => $response->body(),
-                // ]);
-                // return redirect()->back()->with('print_status', 'error');
+                Log::error('PrintNode error response', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+                return redirect()->back()->with('print_status', 'error');
 
         } 
         catch (\Exception $e) {
@@ -324,8 +337,6 @@ class QRLoginController extends Controller
             return redirect()->back()->withErrors('Error generating PDF: ' . $e->getMessage());
         }
     }
-
-
 
     public function history(){
         // User is already authenticated by middleware

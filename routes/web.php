@@ -22,6 +22,7 @@ Route::middleware('qrauth')->group(function () {
     Route::post('/reset-session', [QRLoginController::class, 'resetSession'])->name('reset.session');
     Route::post('/update-qc-pass', [QRLoginController::class, 'updateQcPass'])->name('update.qc.pass');
     Route::post('/update-shift', [QRLoginController::class, 'updateShift'])->name('update.shift');
+    Route::post('/update-template', [QRLoginController::class, 'updateTemplate'])->name('update.template');
     Route::post('/print-label', [QRLoginController::class, 'printLabel'])->name('print.label');
 });
 
