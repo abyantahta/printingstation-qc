@@ -252,7 +252,7 @@ class QRLoginController extends Controller
             $savePath = storage_path('app/public/test.pdf');
                 \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('labels');
             // 2. Try with a very simple HTML snippet
-                Browsershot::html(view('pages.print-label-pdf', compact('printData'))->render())
+                Browsershot::html(view('pages.rev-print-label-pdf', compact('printData'))->render())
                 ->timeout(60000)
                 ->paperSize(130, 85, 'mm') // 144x89mm in millimeters
                 ->margins(0, 0, 0, 0) // No margins

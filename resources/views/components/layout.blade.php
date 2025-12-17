@@ -1882,6 +1882,12 @@
             width: 100%;
             height: 100%;
         }
+        .rev-qr-container svg {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto;
+        }
+        
         
         .qc-section {
             width: 25.1%;
@@ -1932,6 +1938,17 @@
         
         
     </style>
+    <style>
+        .rev-table-outer{
+            /* background-color: red; */
+            width: 100%;
+            height: 100%;
+            border: 1px solid black;
+            font-size: 13px;
+            font-weight: bold;
+        }
+    </style>
+
 </head>
 
 <body>

@@ -1,4 +1,146 @@
 <x-layout>
+
+
+
+    {{-- <div class="label-outer">
+        <div class="label-page">
+            <div class="label-container">
+                <!-- Header -->
+                <table class="rev-table-outer">
+                    <tr style="height:25%;width:100%">
+                        <td style="width: 100%">
+                            <table style="height:100%">
+                                <tr>
+
+                                    <td style="width:25%;height:100%;display:inline-block;height:100%;">
+                                    </td>
+                                    <td style="width:18%;height:100%;display:inline-block;height:100%;text-align:center;border-left:1px solid black;">
+                                        <table style="height:100%">
+                                            <tr style="height:15%;background-color: #adaaaa"><td>ID Supplier</td></tr>
+                                            <tr style="height:85%;font-size:20px"><td>1</td></tr>
+                                        </table>
+                                    </td>
+                                    <td style="width:18%;height:100%;display:inline-block;height:100%;text-align:center;border-left:1px solid black;">
+                                        <table style="height:100%">
+                                            <tr style="height:15%;background-color: #adaaaa"><td>JOB NO</td></tr>
+                                            <tr style="height:85%;font-size:20px"><td>NT-0145</td></tr>
+                                        </table>
+                                    </td>
+                                    <td style="width:18%;height:100%;display:inline-block;height:100%;text-align:center;border-left:1px solid black;">
+                                        <table style="height:100%">
+                                            <tr style="height:15%;background-color: #adaaaa"><td>BACK NO</td></tr>
+                                            <tr style="height:85%;font-size:20px"><td>R2-03</td></tr>
+                                        </table>
+                                    </td>
+                                    <td style="width:21%;height:100%;display:inline-block;height:100%;text-align:center;border-left:1px solid black;">
+                                        <table style="height:100%">
+                                            <tr style="height:15%;background-color: #adaaaa"><td>ID TMMIN</td></tr>
+                                            <tr style="height:85%;font-size:20px"><td>K11</td></tr>
+                                        </table>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr style="height:12%;border:1px solid black;width:100%">
+                        <td style="width: 100%">
+                            <table>
+                                <tr>
+                                    <td style="width:20%;display:inline-block">
+                                        Part No
+                                    </td>
+                                    <td style="width:80%;display:inline-block">
+                                        : 25051-BZ230-00
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr style="height:12%;border:1px solid black;width:100%">
+                        <td style="width: 100%">
+                            <table>
+                                <tr>
+                                    <td style="width:20%;display:inline-block">
+                                        Part Name
+                                    </td>
+                                    <td style="width:80%;display:inline-block">
+                                        : FRAME SUB ASSY, FR DOOR, FR LWR RH
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr style="height:12%">
+
+                        <td style="width:43%;height:100%;display:inline-block; black;height:100%">
+                            <table style="width:100%;height:100%">
+                                <tr>
+                                    <td style="width:47%">Date</td>
+                                    <td style="width:53%">: 12/01/2025</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width:18%;height:100%;display:inline-block;border-left:1px solid black;height:100%;text-align:center;padding-top:7px">
+                            A251006
+                        </td>
+                        <td style="width:18%;height:100%;display:inline-block;border-left:1px solid black;height:100%;text-align:center;padding-top:7px">
+                            Kode Unik
+                        </td>
+                        <td style="width:21%;height:100%;display:inline-block;border-left:1px solid black;height:100%;text-align:center;padding-top:5px;font-size:11px">
+                            BX-0841-000001-KZ001123
+                        </td>
+                    </tr>
+                    <tr style="height:30%;width:100%">
+                        <td style="width: 100%;">
+                            <table style="height:100%">
+                                <tr>
+                                    <td style="width:13%;height:100%;display:inline-block;;height:100%;text-align:center">
+                                        <table style="border-top:1px solid black;height:100%">
+                                            <tr style="height:15%;background-color: #adaaaa"><td>Status</td></tr>
+                                            <tr style="height:85%;font-size:20px"><td>FG</td></tr>
+                                        </table>
+                                    </td>
+                                    <td style="width:12%;height:100%;display:inline-block;;height:100%;text-align:center">
+                                        <table style="border-left:1px solid black;border-top:1px solid black;height:100%">
+                                            <tr style="height:15%;background-color: #adaaaa;"><td>Qty</td></tr>
+                                            <tr style="height:85%;font-size:20px"><td>80</td></tr>
+                                        </table>
+                                    </td>
+                                    <td style="width:18%;height:100%;display:inline-block;;height:100%;text-align:center">
+                                        <table style="border-left:1px solid black;border-top:1px solid black;height:100%">
+                                            <tr style="height:15%;background-color: #adaaaa;"><td>Quality</td></tr>
+                                            <tr style="height:85%;font-size:30px"><td>OK</td></tr>
+                                        </table>
+                                    </td>
+                                    <td style="width:18%;height:100%;display:inline-block;;height:100%;text-align:center">
+                                        <table style="border-left:1px solid black;border-top:1px solid black;height:100%">
+                                            <tr style="height:15%;background-color: #adaaaa;"><td>QC PASS</td></tr>
+                                            <tr style="height:85%;line-height:14px"><td>Tulus Imam Ramadhani</td></tr>
+                                        </table>
+                                    </td>
+                                    <td style="border-left:1px solid black;border-top:1px solid black;width:18%;height:100%;display:inline-block;;height:100%;text-align:center">
+
+                                    </td>
+                                    <td style="border-left:1px solid black;width:21%;height:100%;display:inline-block;;height:100%;text-align:center">
+
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div> --}}
+
+
+
+
+
+
     {{-- <h1 class="bg-red-400">halo semuanya</h1> --}}
     <div class="w-full flex flex-col items-center pt-12 ">
         
@@ -56,9 +198,16 @@
             {{-- <input class="bg-green-200 w-full pl-12 rounded-md placeholder:italic placeholder:text-xl " placeholder="Scan Barcode RFID..." type="text"> --}}
             {{-- </div> --}}
         </div>
+
+
+
+
+
+
+
         <div class=" w-full lg:w-4/5 shadow-xl h-96 mt-8 p-12 flex gap-12">
             <div class="w-1/2 h-full flex justify-center ">
-                <div class="w-[30rem] h-[15.5rem] lg {{ $label ? $label->warna_kertas : '-' }} p-2  border-2">
+                {{-- <div class="w-[30rem] h-[15.5rem] lg {{ $label ? $label->warna_kertas : '-' }} p-2  border-2">
                     <div class="w-full h-12 flex  box-border outline-1">
                         <div class="w-3/4 h-full flex items-center justify-center outline-1">
                             <img class="h-full" src="storage/logosdi.png" alt="logo"
@@ -163,8 +312,169 @@
                         class="w-full h-[0.5rem]  text-[0.4rem] flex items-center justify-center pt-1 text-center outline-1">
                         FORM QC-001/PROS-SDI-QC-005/REV 1
                     </div>
-                    {{-- <div class="w-full h-4 bg-red-400"></div> --}}
+                </div> --}}
+                <div class="">
+                    <div class="label-page {{ $label ? $label->warna_kertas : '' }}">
+                        <div class="label-container">
+                            <!-- Header -->
+                            <table class="rev-table-outer">
+                                <tr style="height:25%;width:100%">
+                                    <td style="width: 100%">
+                                        <table style="height:100%">
+                                            <tr>
+            
+                                                <td style="width:25%;height:100%;display:inline-block;height:100%;">
+                                                    <img style="width: 50px;height:50px;margin:0 auto;" src="storage/logosdi2.png" alt="logo" />
+                                                </td>
+                                                <td style="width:18%;height:100%;display:inline-block;height:100%;text-align:center;border-left:1px solid black;">
+                                                    <table style="height:100%">
+                                                        <tr style="height:15%;background-color: #adaaaa;padding:0 2px;"><td>ID SUPPLIER</td></tr>
+                                                        <tr style="height:85%;font-size:15px"><td>300268</td></tr>
+                                                    </table>
+                                                </td>
+                                                <td style="width:18%;height:100%;display:inline-block;height:100%;text-align:center;border-left:1px solid black;">
+                                                    <table style="height:100%">
+                                                        <tr style="height:15%;background-color: #adaaaa"><td>JOB NO</td></tr>
+                                                        <tr style="height:85%;font-size:15px"><td>{{ $label ? $label->job_no : '-' }}</td></tr>
+                                                    </table>
+                                                </td>
+                                                <td style="width:18%;height:100%;display:inline-block;height:100%;text-align:center;border-left:1px solid black;">
+                                                    <table style="height:100%">
+                                                        <tr style="height:15%;background-color: #adaaaa"><td>BACK NO</td></tr>
+                                                        <tr style="height:85%;font-size:20px"><td>-</td></tr>
+                                                    </table>
+                                                </td>
+                                                <td style="width:21%;height:100%;display:inline-block;height:100%;text-align:center;border-left:1px solid black;">
+                                                    <table style="height:100%">
+                                                        <tr style="height:15%;background-color: #adaaaa"><td>ID TMMIN</td></tr>
+                                                        <tr style="height:85%;font-size:20px"><td>-</td></tr>
+                                                    </table>
+                                                </td>
+            
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr style="height:12%;border:1px solid black;width:100%">
+                                    <td style="width: 100%">
+                                        <table>
+                                            <tr>
+                                                <td style="width:20%;display:inline-block;padding-left:5px">
+                                                    PART NO
+                                                </td>
+                                                <td style="width:80%;display:inline-block">
+                                                    : {{ $label ? $label->part_no : '-' }}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr style="height:12%;border:1px solid black;width:100%">
+                                    <td style="width: 100%">
+                                        <table>
+                                            @if($label && !empty($label->part_name) && str_contains(strtoupper($label->part_name), 'RH'))
+                                            <tr>
+                                                <td style="width:20%;display:inline-block;background-color:black;color:white;padding-left:5px">
+                                                    PART NAME
+                                                </td>
+                                                <td style="width:80%;display:inline-block;background-color:black;color:white">
+                                                    : {{ $label ? $label->part_name : '-' }}
+                                                </td>
+                                            </tr>
+                                            @else
+                                            <tr>
+                                                <td style="width:20%;display:inline-block;padding-left:5px">
+                                                    PART NAME
+                                                </td>
+                                                <td style="width:80%;display:inline-block">
+                                                    : {{ $label ? $label->part_name : '-' }}
+                                                </td>
+                                            </tr>
+                                            @endif
+                                        </table>
+                                    </td>
+                                </tr>
+            
+                                <tr style="height:12%">
+            
+                                    <td style="width:43%;height:100%;display:inline-block; black;height:100%">
+                                        <table style="width:100%;height:100%">
+                                            <tr>
+                                                <td style="width:47%;padding-left:5px">DATE</td>
+                                                <td style="width:53%">: {{ date('d/m/Y') }}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="width:18%;height:100%;display:inline-block;border-left:1px solid black;height:100%;text-align:center;padding-top:7px">
+                                        {{ $shift ? $shift . date('ymd') : '-' }}
+                                    </td>
+                                    <td style="width:18%;height:100%;display:inline-block;border-left:1px solid black;height:100%;text-align:center;padding-top:7px">
+                                        MARKING
+                                    </td>
+            
+                                    @if(strlen($qr_value)==3 || strlen($qr_value)==4 || strlen($qr_value)==5 ||strlen($qr_value)==6 ||strlen($qr_value)==7 ||strlen($qr_value)==8)
+                                    <td style="width:21%;height:100%;display:inline-block;border-left:1px solid black;height:100%;text-align:center;padding-top:5px;font-size:10px">
+                                        {{ $qr_value."-".str_pad(1, 3, '0', STR_PAD_LEFT) }}
+                                        {{-- 25051-BZ230-00-KZ001 --}}
+                                    </td>
+                                    @else
+                                    <td style="width:21%;height:100%;display:inline-block;border-left:1px solid black;height:100%;text-align:center;padding-top:5px;font-size:11px">
+                                        {{ $qr_value.str_pad(1, 3, '0', STR_PAD_LEFT) }}
+                                        {{-- 25051-BZ230-00-KZ001 --}}
+                                    </td>
+                                    @endif
+                                    </td>
+            
+            
+                                </tr>
+                                <tr style="height:30%;width:100%">
+                                    <td style="width: 100%;">
+                                        <table style="height:100%">
+                                            <tr>
+                                                <td style="width:13%;height:100%;display:inline-block;;height:100%;text-align:center">
+                                                    <table style="border-top:1px solid black;height:100%">
+                                                        <tr style="height:15%;background-color: #adaaaa"><td>Status</td></tr>
+                                                        <tr style="height:85%;font-size:30px"><td>FG</td></tr>
+                                                    </table>
+                                                </td>
+                                                <td style="width:12%;height:100%;display:inline-block;;height:100%;text-align:center">
+                                                    <table style="border-left:1px solid black;border-top:1px solid black;height:100%">
+                                                        <tr style="height:15%;background-color: #adaaaa;"><td>
+                                                            Qty<span style="font-size:7px">(pcs)</span>
+                                                        </td></tr>
+                                                        <tr style="height:85%;font-size:20px"><td>{{ $label ? $label->qty: '-' }}</td></tr>
+                                                    </table>
+                                                </td>
+                                                <td style="width:18%;height:100%;display:inline-block;;height:100%;text-align:center">
+                                                    <table style="border-left:1px solid black;border-top:1px solid black;height:100%">
+                                                        <tr style="height:15%;background-color: #adaaaa;"><td>Quality</td></tr>
+                                                        <tr style="height:85%;font-size:30px"><td>OK</td></tr>
+                                                    </table>
+                                                </td>
+                                                <td style="width:18%;height:100%;display:inline-block;;height:100%;text-align:center">
+                                                    <table style="border-left:1px solid black;border-top:1px solid black;height:100%">
+                                                        <tr style="height:15%;background-color: #adaaaa;"><td>QC PASS</td></tr>
+                                                        <tr style="height:85%;line-height:14px"><td>{{ $qcPass ?: '-' }}</td></tr>
+                                                    </table>
+                                                </td>
+                                                <td style="border-left:1px solid black;border-top:1px solid black;width:18%;height:100%;display:inline-block;;height:100%;text-align:center;font-size:15px;padding-top:15px">
+                                                    {{ $label ? $label->marking : '-' }}
+                                                    {{-- ORANGE --}}
+                                                </td>
+                                                <td class="rev-qr-container" style="border-left:1px solid black;width:21%;height:100%;display:inline-block;height:100%;text-align:center;padding:5px">
+                                                    {{-- {!! $printData['qrCodes'][$i] !!} --}}
+                                                    {!! $label? '<img class="w-14 h-14 mx-auto" src="storage/qricon.png" alt="logo" class="" />': '' !!}
+                                                </td>
+            
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
             </div>
             <div class="flex-1/3 flex flex-col gap-y-4">
                 <form action="{{ route('update.shift') }}" method="POST" class="w-full">
@@ -230,6 +540,15 @@
 
             </div>
         </div>
+
+
+
+
+
+
+
+
+
     </div>
     <!-- <button id="printBtn" class="bg-red-400 cursor-pointer p-4">Print Now</button> -->
 
