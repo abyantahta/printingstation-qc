@@ -276,8 +276,8 @@ class QRLoginController extends Controller
                 ->savePdf(storage_path("app/public/labels/label-print.pdf"));
 
                 
-                $printerId = 75003363 ; // atau ID printer dari NodePrint/PrintNode
-                $apiKey = 'ODaYP6oCHSW2T6vvZeqtT01ETsn8UICoOuAxIPLLY6k';
+                $printerId = 75201437  ; // atau ID printer dari NodePrint/PrintNode
+                $apiKey = 'spLeDN1F5mFTKVung_lBvyrTZS4f0bn-1qfavRugXsg';
                 $apiPassword = env('PRINTNODE_PASSWORD', '');
                 $httpClient = Http::withBasicAuth($apiKey, $apiPassword)
                     ->timeout(60) // total request timeout
