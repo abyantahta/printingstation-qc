@@ -281,7 +281,7 @@ class QRLoginController extends Controller
                 $apiPassword = env('PRINTNODE_PASSWORD', '');
                 $httpClient = Http::withBasicAuth($apiKey, $apiPassword)
                     ->timeout(60) // total request timeout
-                    ->connectTimeout(10) // fail faster on connection issues
+                    ->connectTimeout(30) // fail faster on connection issues
                     ->retry(3, 500); // simple retry to ride out transient hiccups
 
                 $response = $httpClient->get('https://api.printnode.com/printers');
