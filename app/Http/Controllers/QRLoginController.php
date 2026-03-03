@@ -20,11 +20,88 @@ use Rawilk\Printing\Api\PrintNode\Client;
 class QRLoginController extends Controller
 {
     /**
+     * PrintNode settings (BasicAuth: apiKey as username, empty password).
+     * NOTE: Keeping api key here because requested, but prefer env/config in production.
+     */
+    private string $printNodeApiKey = 'spLeDN1F5mFTKVung_lBvyrTZS4f0bn-1qfavRugXsg';
+    private string $printNodeApiPassword = '';
+
+    /**
      * Check if user is authenticated via session
      */
     private function isAuthenticated()
     {
         return session('user_logged_in') && session('user_data');
+    }
+
+    /**
+     * Build a preconfigured HTTP client for PrintNode requests.
+     */
+    private function printNodeHttpClient()
+    {
+        $apiKey = (string) session('printnode_api_key', '');
+        if ($apiKey === '') {
+            $apiKey = $this->printNodeApiKey ?: (string) config('printing.drivers.printnode.api_key', '');
+        }
+        $apiPassword = $this->printNodeApiPassword ?: (string) env('PRINTNODE_PASSWORD', '');
+
+        return Http::withBasicAuth($apiKey, $apiPassword)
+            ->timeout(60)
+            ->connectTimeout(30)
+            ->retry(3, 500);
+    }
+
+    /**
+     * Fetch printers list from PrintNode and return only id + name.
+     *
+     * @return array{printers: array<int, array{id:int, name:string}>, defaultPrinterId: int|null}
+     */
+    private function fetchPrintNodePrinters(): array
+    {
+        try {
+            $response = $this->printNodeHttpClient()->get('https://api.printnode.com/printers');
+
+            if (! $response->successful()) {
+                Log::warning('Failed to fetch PrintNode printers', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+                return ['printers' => [], 'defaultPrinterId' => null];
+            }
+
+            $printers = $response->json();
+            if (! is_array($printers)) {
+                return ['printers' => [], 'defaultPrinterId' => null];
+            }
+
+            $mapped = [];
+            $defaultPrinterId = null;
+            foreach ($printers as $printer) {
+                if (! is_array($printer)) {
+                    continue;
+                }
+                if (! array_key_exists('id', $printer) || ! array_key_exists('name', $printer)) {
+                    continue;
+                }
+
+                // PrintNode includes a `default: true` flag on the default printer.
+                if ($defaultPrinterId === null && array_key_exists('default', $printer) && $printer['default'] === true) {
+                    $defaultPrinterId = (int) $printer['id'];
+                }
+
+                $mapped[] = [
+                    'id' => (int) $printer['id'],
+                    'name' => (string) $printer['name'],
+                ];
+            }
+
+            return ['printers' => $mapped, 'defaultPrinterId' => $defaultPrinterId];
+        } catch (\Throwable $e) {
+            Log::error('Exception while fetching PrintNode printers', [
+                'message' => $e->getMessage(),
+            ]);
+            return ['printers' => [], 'defaultPrinterId' => null];
+        }
     }
     
     /**
@@ -55,8 +132,80 @@ class QRLoginController extends Controller
         $shift = session('shift');
         $qr_value = session('qr_value');
         $labelTemplate = session('label_template', 'new'); // Default to 'new' template
+
+        // Printers list for UI selection
+        $printersData = $this->fetchPrintNodePrinters();
+        $printers = $printersData['printers'] ?? [];
+        $printNodeDefaultPrinterId = $printersData['defaultPrinterId'] ?? null;
+        $selectedPrinterId = session('printer_id');
+        $defaultPrinterId = (int) config('printing.default_printer_id', 0);
+        $hasPrintNodeApiKey = (string) session('printnode_api_key', '') !== '';
+
+        // If session not set yet, prefer PrintNode's `default: true` printer.
+        if (empty($selectedPrinterId) && ! empty($printNodeDefaultPrinterId)) {
+            $selectedPrinterId = (int) $printNodeDefaultPrinterId;
+            session(['printer_id' => (int) $printNodeDefaultPrinterId]);
+        }
+
+        // Otherwise fall back to app default_printer_id if it exists in PrintNode list.
+        if (empty($selectedPrinterId) && $defaultPrinterId > 0) {
+            foreach ($printers as $p) {
+                if ((int) ($p['id'] ?? 0) === $defaultPrinterId) {
+                    $selectedPrinterId = $defaultPrinterId;
+                    session(['printer_id' => $defaultPrinterId]);
+                    break;
+                }
+            }
+        }
         
-        return view('pages.print', compact('qc_pass','username', 'label', 'qcPass','shift','qr_value','labelTemplate'));
+        return view('pages.print', compact(
+            'qc_pass',
+            'username',
+            'label',
+            'qcPass',
+            'shift',
+            'qr_value',
+            'labelTemplate',
+            'printers',
+            'selectedPrinterId',
+            'hasPrintNodeApiKey'
+        ));
+    }
+
+    public function updatePrintNodeApiKey(Request $request)
+    {
+        // User is already authenticated by middleware
+        $validated = $request->validate([
+            // allow empty string to clear
+            'api_key' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $apiKey = trim((string) ($validated['api_key'] ?? ''));
+
+        if ($apiKey === '') {
+            session()->forget('printnode_api_key');
+            // printer list depends on key; clear selected printer too
+            session()->forget('printer_id');
+            return redirect()->route('print');
+        }
+
+        session(['printnode_api_key' => $apiKey]);
+        // reset selected printer so default:true can apply under new account/key
+        session()->forget('printer_id');
+
+        return redirect()->route('print');
+    }
+
+    public function updatePrinter(Request $request)
+    {
+        // User is already authenticated by middleware
+        $validated = $request->validate([
+            'printer_id' => ['required', 'integer', 'min:1'],
+        ]);
+
+        session(['printer_id' => (int) $validated['printer_id']]);
+
+        return redirect()->route('print');
     }
 
     public function store(Request $request){
@@ -189,9 +338,14 @@ class QRLoginController extends Controller
             $qcPass = session('qc_pass');
             $shift = session('shift');
             $qr_value = session('qr_value');
+            $printerId = (int) session('printer_id', (int) config('printing.default_printer_id', 0));
             
             if (!$label) {
                 return redirect()->back()->withErrors('No label data found. Please scan a label first.');
+            }
+
+            if ($printerId <= 0) {
+                return redirect()->back()->withErrors('Please select a printer first.');
             }
             
             if (!$quantity || $quantity <= 0) {
@@ -267,7 +421,7 @@ class QRLoginController extends Controller
             // 3. Generate PDF with selected template
             Browsershot::html(view($pdfView, compact('printData'))->render())
                 ->timeout(60000)
-                ->paperSize(130, 85, 'mm') // 144x89mm in millimeters
+                ->paperSize(130, 90, 'mm') // 144x89mm in millimeters
                 ->margins(0, 0, 0, 0) // No margins
                 ->dismissDialogs() // Dismiss any browser dialogs
                 ->waitUntilNetworkIdle() // Wait for network to be idle
@@ -276,31 +430,23 @@ class QRLoginController extends Controller
                 ->savePdf(storage_path("app/public/labels/label-print.pdf"));
 
                 
-                $printerId = 75201437  ; // atau ID printer dari NodePrint/PrintNode
-                $apiKey = 'spLeDN1F5mFTKVung_lBvyrTZS4f0bn-1qfavRugXsg';
-                $apiPassword = env('PRINTNODE_PASSWORD', '');
-                $httpClient = Http::withBasicAuth($apiKey, $apiPassword)
-                    ->timeout(60) // total request timeout
-                    ->connectTimeout(30) // fail faster on connection issues
-                    ->retry(3, 500); // simple retry to ride out transient hiccups
-
-                $response = $httpClient->get('https://api.printnode.com/printers');
+                $httpClient = $this->printNodeHttpClient();
                 $pdfBase64 = base64_encode(file_get_contents(storage_path("app/public/labels/label-print.pdf")));
 
-$response = $httpClient
-    ->post('https://api.printnode.com/printjobs', [
-        'printerId' => $printerId,
-        'title' => 'Label Print',
-        'contentType' => 'pdf_base64',
-        'content' => $pdfBase64,
-        'source' => 'LaravelApp',
-        'options' => [
-            'fit_to_page' => false, // Prevent scaling
-            'scale' => 100, // 100% scale - no scaling
-            'auto_rotate' => false, // Prevent auto rotation
-            'auto_center' => false, // Prevent auto centering
-        ],
-    ]);
+                $response = $httpClient
+                    ->post('https://api.printnode.com/printjobs', [
+                        'printerId' => $printerId,
+                        'title' => 'Label Print',
+                        'contentType' => 'pdf_base64',
+                        'content' => $pdfBase64,
+                        'source' => 'LaravelApp',
+                        'options' => [
+                            'fit_to_page' => false, // Prevent scaling
+                            'scale' => 100, // 100% scale - no scaling
+                            'auto_rotate' => false, // Prevent auto rotation
+                            'auto_center' => false, // Prevent auto centering
+                        ],
+                    ]);
 
                 if ($response->successful()) {
                     // Update history record with success status

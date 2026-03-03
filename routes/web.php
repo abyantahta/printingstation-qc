@@ -23,6 +23,8 @@ Route::middleware('qrauth')->group(function () {
     Route::post('/update-qc-pass', [QRLoginController::class, 'updateQcPass'])->name('update.qc.pass');
     Route::post('/update-shift', [QRLoginController::class, 'updateShift'])->name('update.shift');
     Route::post('/update-template', [QRLoginController::class, 'updateTemplate'])->name('update.template');
+    Route::post('/update-printer', [QRLoginController::class, 'updatePrinter'])->name('update.printer');
+    Route::post('/update-printnode-api-key', [QRLoginController::class, 'updatePrintNodeApiKey'])->name('update.printnode.api_key');
     Route::post('/print-label', [QRLoginController::class, 'printLabel'])->name('print.label');
 });
 

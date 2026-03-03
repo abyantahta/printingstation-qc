@@ -2,6 +2,20 @@
 
 
 
+    {{-- PrintNode API Key Button (top-left) --}}
+    <form id="printnodeApiKeyForm" action="{{ route('update.printnode.api_key') }}" method="POST" class="fixed top-3 left-3 z-50">
+        @csrf
+        <input type="hidden" name="api_key" id="printnode_api_key" value="">
+        <button
+            type="button"
+            id="printnodeApiKeyBtn"
+            title="Set PrintNode API Key"
+            class="w-9 h-9 rounded-full shadow-md border-2 flex items-center justify-center font-bold text-xs
+                {{ ($hasPrintNodeApiKey ?? false) ? 'bg-green-400 border-green-600 text-white' : 'bg-red-400 border-red-600 text-white' }}">
+            KEY
+        </button>
+    </form>
+
     {{-- <h1 class="bg-red-400">halo semuanya</h1> --}}
     <div class="w-full flex flex-col items-center pt-12 ">
         
@@ -347,13 +361,28 @@
             </div>
             <div class="flex-1/3 flex flex-col gap-y-4">
                 {{-- Template Toggle --}}
-                <form action="{{ route('update.template') }}" method="POST" class="w-full">
-                    @csrf
-                    <select required class="border-3 rounded-md h-12 pl-8 w-full bg-yellow-100" name="label_template" id="label_template">
-                        <option value="new" {{ $labelTemplate == 'new' ? 'selected' : '' }}>New Template</option>
-                        <option value="old" {{ $labelTemplate == 'old' ? 'selected' : '' }}>Old Template</option>
-                    </select>
-                </form>
+                <div class="flex gap-4">
+                    <form action="{{ route('update.template') }}" method="POST" class="w-1/2">
+                        @csrf
+                        <select required class="border-3 rounded-md h-12 pl-8 w-full bg-yellow-100" name="label_template" id="label_template">
+                            <option value="new" {{ $labelTemplate == 'new' ? 'selected' : '' }}>New Template</option>
+                            <option value="old" {{ $labelTemplate == 'old' ? 'selected' : '' }}>Old Template</option>
+                        </select>
+                    </form>
+                    {{-- Printer Select (PrintNode) --}}
+                    <form action="{{ route('update.printer') }}" method="POST" class="w-1/2">
+                        @csrf
+                        <select required class="border-3 rounded-md h-12 pl-8 w-full bg-blue-100" name="printer_id" id="printer_id">
+                            <option class="" value="">Pilih Printer</option>
+                            @foreach (($printers ?? []) as $printer)
+                                <option value="{{ $printer['id'] }}"
+                                    {{ (string)($selectedPrinterId ?? '') === (string)$printer['id'] ? 'selected' : '' }}>
+                                    {{ $printer['name'] }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
+                </div>
                 <form action="{{ route('update.shift') }}" method="POST" class="w-full">
                     @csrf
                     <select required class="border-3 rounded-md h-12 pl-8 w-full" name="shift" id="shift">
@@ -458,13 +487,14 @@
 
     <script>
         function validateForm() {
+            const printerId = document.getElementById('printer_id')?.value || '';
             const shift = document.getElementById('shift').value;
             const qcPass = document.getElementById('qc_pass').value;
             const quantity = document.getElementById('quantity').value;
             const submitBtn = document.getElementById('submitBtn');
 
             // Check if all required fields are filled
-            const isValid = shift !== '' && qcPass !== '' && quantity !== '' && parseInt(quantity) > 0;
+            const isValid = printerId !== '' && shift !== '' && qcPass !== '' && quantity !== '' && parseInt(quantity) > 0;
 
             // Enable/disable submit button and update styling
             submitBtn.disabled = !isValid;
@@ -482,7 +512,32 @@
         document.addEventListener('DOMContentLoaded', function() {
             validateForm();
 
+            // PrintNode API key button -> prompt + submit
+            const apiKeyBtn = document.getElementById('printnodeApiKeyBtn');
+            if (apiKeyBtn) {
+                apiKeyBtn.addEventListener('click', function() {
+                    const currentState = {{ ($hasPrintNodeApiKey ?? false) ? 'true' : 'false' }};
+                    const currentApiKey = @json((string) session('printnode_api_key', ''));
+                    const hint = currentState
+                        ? "Enter new PrintNode API key (leave empty to clear):"
+                        : "Enter PrintNode API key:";
+                    const key = prompt(hint, currentApiKey);
+                    if (key === null) return; // cancelled
+                    document.getElementById('printnode_api_key').value = key;
+                    document.getElementById('printnodeApiKeyForm').submit();
+                });
+            }
+
             // Add event listeners to form fields
+            const printerSelect = document.getElementById('printer_id');
+            if (printerSelect) {
+                printerSelect.addEventListener('change', function() {
+                    validateForm();
+                    // Submit the printer form to update the session
+                    this.form.submit();
+                });
+            }
+
             document.getElementById('shift').addEventListener('change', function() {
                 validateForm();
                 // Submit the shift form to update the session
@@ -548,13 +603,14 @@
 
         // Prevent form submission if validation fails and handle loading state
         document.getElementById('printForm').addEventListener('submit', function(e) {
+            const printerId = document.getElementById('printer_id')?.value || '';
             const shift = document.getElementById('shift').value;
             const qcPass = document.getElementById('qc_pass').value;
             const quantity = document.getElementById('quantity').value;
 
-            if (shift === '' || qcPass === '' || quantity === '' || parseInt(quantity) <= 0) {
+            if (printerId === '' || shift === '' || qcPass === '' || quantity === '' || parseInt(quantity) <= 0) {
                 e.preventDefault();
-                alert('Please fill in all required fields: Shift, QC Pass, and Quantity (must be greater than 0)');
+                alert('Please fill in all required fields: Printer, Shift, QC Pass, and Quantity (must be greater than 0)');
                 return false;
             }
 
