@@ -30,4 +30,17 @@ return [
     */
     'default_printer_id' => 74703545  ,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Special Part Numbers
+    |--------------------------------------------------------------------------
+    | Part numbers that require special QR formatting (e.g. include shift/date).
+    */
+    'special_part_nos' => [
+        '25051-BZ190-00-KZ',
+        '67401-BZ190-00',
+        '67401-BZ150-00',
+        // add more part numbers here...
+    ],
+
 ];

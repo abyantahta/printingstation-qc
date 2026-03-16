@@ -284,6 +284,19 @@ class QRLoginController extends Controller
             // dd($input,$partNo);
             
         }
+        //KHUSUS UNTUK  TMMIN EXPORT
+        else if(strlen($input)==25 && preg_match('/^\d{5}-[A-Z]{2}\d{3}-\d{2}\d{3}#[A-Z0-9]{7}$/', $input)){
+            $partNo = substr($input,0,14);
+            $isLabelExist = Label::where('part_no',$partNo)->first();
+            // dd($partNo, $isLabelExist);
+            if(!$isLabelExist){
+                return redirect()->back()->withErrors('Label tidak ditemukan');
+            }
+            $label = $isLabelExist;
+            $qrValue = $partNo;
+            // dd($input,$partNo);
+            
+        }
         else{
             // dd('halo2');
             return redirect()->back()->withErrors('Format tidak sesuai, silahkan scan ulang dengan format yang sesuai !');
@@ -382,12 +395,13 @@ class QRLoginController extends Controller
             // Generate QR codes for each label using SVG format (no ImageMagick required)
             $qrCodes = [];
             $qr = null;
+            $specialPartNos = (array) config('printing.special_part_nos', ['25051-BZ190-00-KZ']);
             for ($i = 0; $i < $quantity; $i++) {
                 $qrValue = null;
                 if($qr_value == $label->job_no){
                     $qr = $label->job_no;
                     $qrValue = $label->job_no . "-" . str_pad($i + 1, 3, '0', STR_PAD_LEFT);
-                }else if($qr_value == $label->part_no && $qr_value == "25051-BZ190-00-KZ"){
+                }else if($qr_value == $label->part_no && in_array($qr_value, $specialPartNos, true)){
                     $qr = $label->part_no;
                     $qrValue = $label->part_no . str_pad($i + 1, 3, '0', STR_PAD_LEFT) . "#" . $shift . date('ymd');
                 }
