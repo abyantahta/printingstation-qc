@@ -395,7 +395,7 @@ class QRLoginController extends Controller
             // Generate QR codes for each label using SVG format (no ImageMagick required)
             $qrCodes = [];
             $qr = null;
-            $specialPartNos = (array) config('printing.special_part_nos', ['25051-BZ190-00-KZ']);
+            $specialPartNos = (array) config('printing.special_part_nos', ['25051-BZ190-00-KZ',"67408-BZ190-00","67403-BZ180-00"]);
             for ($i = 0; $i < $quantity; $i++) {
                 $qrValue = null;
                 if($qr_value == $label->job_no){

@@ -9,7 +9,6 @@
                         <td style="width: 100%">
                             <table style="height:100%">
                                 <tr>
-
                                     <td style="width:25%;height:100%;display:inline-block;height:100%;">
                                         <img class="imgLabelBaru" style="width: 50px;height:50px" src="{{ public_path('storage/logosdi2.png') }}" alt="logo" />
                                     </td>
@@ -34,10 +33,9 @@
                                     <td style="width:21%;height:100%;display:inline-block;height:100%;text-align:center;border-left:1px solid black;">
                                         <table style="height:100%">
                                             <tr style="height:15%;background-color: #adaaaa"><td>ID TMMIN</td></tr>
-                                            <tr style="height:85%;font-size:13px"><td>{{$printData['label']->id_tmmin}}</td></tr>
+                                            <tr style="height:85%;font-size:13px"><td>{{$printData['label']->id_tmmin ?? '-'}}</td></tr>
                                         </table>
                                     </td>
-
                                 </tr>
                             </table>
                         </td>
