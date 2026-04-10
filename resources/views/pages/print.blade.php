@@ -413,7 +413,7 @@
                             type="number" min="1" value="{{ session('print_quantity', '') }}" required> --}}
                             <select required class="border-3 rounded-md h-12 pl-8 w-full" name="quantity" id="quantity">
                                 <option class="" value="" {{ session('print_quantity') ? '' : 'selected' }}>Quantity</option>
-                                @for($i = 1; $i <= 60; $i++)
+                                @for($i = 1; $i <= 99; $i++)
                                     <option class="" value="{{ $i }}" {{ (string)session('print_quantity') === (string)$i ? 'selected' : '' }}>{{ $i }}</option>
                                 @endfor
                             </select>
