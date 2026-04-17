@@ -111,6 +111,35 @@ class QRLoginController extends Controller
     {
         return session('user_data');
     }
+
+    /**
+     * Part yang membutuhkan pilihan TMMIN Export vs local/ADM.
+     */
+    private function isTmminSelectablePart(?Label $label): bool
+    {
+        if (! $label || $label->part_no === null || $label->part_no === '') {
+            return false;
+        }
+        $p = (string) $label->part_no;
+
+        return in_array($p, ['67407-BZ190-00', '67408-BZ190-00'], true);
+    }
+
+    /**
+     * Qty tampilan/cetak: Export = 15, selain itu dari database.
+     */
+    private function effectiveLabelQty(?Label $label): int
+    {
+        if (! $label) {
+            return 0;
+        }
+        $fromDb = (int) $label->qty;
+        if ($this->isTmminSelectablePart($label) && session('tmmin_market') === 'export') {
+            return 15;
+        }
+
+        return $fromDb;
+    }
     public function index(){
         // Check if user is logged in via session
         if($this->isAuthenticated()){
@@ -157,6 +186,10 @@ class QRLoginController extends Controller
                 }
             }
         }
+
+        $showTmminMarket = $label && $this->isTmminSelectablePart($label);
+        $tmminMarket = session('tmmin_market', 'local_adm');
+        $labelDisplayQty = $this->effectiveLabelQty($label);
         
         return view('pages.print', compact(
             'qc_pass',
@@ -168,7 +201,10 @@ class QRLoginController extends Controller
             'labelTemplate',
             'printers',
             'selectedPrinterId',
-            'hasPrintNodeApiKey'
+            'hasPrintNodeApiKey',
+            'showTmminMarket',
+            'tmminMarket',
+            'labelDisplayQty'
         ));
     }
 
@@ -248,60 +284,38 @@ class QRLoginController extends Controller
 
     public function findLabel(Request $request){
         // User is already authenticated by middleware
+        // Format wajib: part_no#job_no#seq#lot_no
         $input = trim($request->input('barcode'));
-        $label = null;
-        $qrValue = null;
-        if(strlen($input) == 6 ||strlen($input) == 7 ||strlen($input) == 8 ||strlen($input) == 9 ||strlen($input) == 10 ||strlen($input) == 11){
-            
-            $jobNo = substr($input,0,strlen($input)-4);
-            $isLabelExist = Label::where('job_no',$jobNo)->first();
-            if(!$isLabelExist){
-                // dd('halo');
-                return redirect()->back()->withErrors('Label tidak ditemukan');
-            }
-            $label = $isLabelExist;
-            $qrValue = $jobNo;
-        }
-        else if(strlen($input)==17||strlen($input)==18||strlen($input)==19||strlen($input)==20){
-            $partNo = substr($input,0,strlen($input)-3);
-            $isLabelExist = Label::where('part_no',$partNo)->first();
-            if(!$isLabelExist){
-                return redirect()->back()->withErrors('Label tidak ditemukan');
-            }
-            $label = $isLabelExist;
-            $qrValue = $partNo;
-        }
-        //KHUSUS UNTUK  DCWA EXPORT
-        else if(strlen($input)==28 && preg_match('/^\d{5}-[A-Z]{2}\d{3}-\d{2}-[A-Z]{2}\d{3}#[A-Z0-9]{7}$/', $input)){
-            $partNo = substr($input,0,17);
-            $isLabelExist = Label::where('part_no',$partNo)->first();
-            // dd($partNo, $isLabelExist);
-            if(!$isLabelExist){
-                return redirect()->back()->withErrors('Label tidak ditemukan');
-            }
-            $label = $isLabelExist;
-            $qrValue = $partNo;
-            // dd($input,$partNo);
-            
-        }
-        //KHUSUS UNTUK  TMMIN EXPORT
-        else if(strlen($input)==25 && preg_match('/^\d{5}-[A-Z]{2}\d{3}-\d{2}\d{3}#[A-Z0-9]{7}$/', $input)){
-            $partNo = substr($input,0,14);
-            $isLabelExist = Label::where('part_no',$partNo)->first();
-            // dd($partNo, $isLabelExist);
-            if(!$isLabelExist){
-                return redirect()->back()->withErrors('Label tidak ditemukan');
-            }
-            $label = $isLabelExist;
-            $qrValue = $partNo;
-            // dd($input,$partNo);
-            
-        }
-        else{
-            // dd('halo2');
+        $parts = array_map('trim', explode('#', $input));
+
+        if (count($parts) !== 4) {
             return redirect()->back()->withErrors('Format tidak sesuai, silahkan scan ulang dengan format yang sesuai !');
         }
-        
+
+        if ($parts[0] === '' || $parts[1] === '' || $parts[2] === '' || $parts[3] === '') {
+            return redirect()->back()->withErrors('Format tidak sesuai, silahkan scan ulang dengan format yang sesuai !');
+        }
+
+        // QR login QC memakai pemisah # berbeda (QC#...) — tolak agar tidak tertukar
+        if (strtoupper($parts[0]) === 'QC') {
+            return redirect()->back()->withErrors('Format tidak sesuai, silahkan scan ulang dengan format yang sesuai !');
+        }
+
+        $partNo = $parts[0];
+        $isLabelExist = Label::where('part_no', $partNo)->first();
+        if (! $isLabelExist) {
+            return redirect()->back()->withErrors('Label tidak ditemukan');
+        }
+
+        $label = $isLabelExist;
+        $qrValue = $partNo;
+
+        if ($this->isTmminSelectablePart($label)) {
+            session(['tmmin_market' => 'local_adm']);
+        } else {
+            session()->forget('tmmin_market');
+        }
+
         // Save label data to session
         session(['label_data' => $label]);
         session(['qr_value' => $qrValue]);
@@ -318,6 +332,7 @@ class QRLoginController extends Controller
         session()->forget('shift');
         session()->forget('print_quantity');
         session()->forget('print_data');
+        session()->forget('tmmin_market');
         // Note: label_template is intentionally NOT reset so user keeps their preference
         return redirect()->route('print');
     }
@@ -336,6 +351,15 @@ class QRLoginController extends Controller
         return redirect()->route('print');
     }
 
+    public function updateTmminMarket(Request $request){
+        $validated = $request->validate([
+            'tmmin_market' => ['required', 'string', 'in:export,local_adm'],
+        ]);
+        session(['tmmin_market' => $validated['tmmin_market']]);
+
+        return redirect()->route('print');
+    }
+
     public function updateTemplate(Request $request){
         // User is already authenticated by middleware
         $template = $request->input('label_template');
@@ -350,7 +374,6 @@ class QRLoginController extends Controller
             $label = session('label_data');
             $qcPass = session('qc_pass');
             $shift = session('shift');
-            $qr_value = session('qr_value');
             $printerId = (int) session('printer_id', (int) config('printing.default_printer_id', 0));
             
             if (!$label) {
@@ -392,38 +415,24 @@ class QRLoginController extends Controller
                 'print_status' => 'pending'
             ]);
             
-            // Generate QR codes for each label using SVG format (no ImageMagick required)
+            // Generate QR codes — format standar: part_no#job_no#seq#lot_no
             $qrCodes = [];
-            $qr = null;
-            $specialPartNos = [
-                '25051-BZ190-00-KZ',"67408-BZ190-00","67403-BZ180-00","67401-BZ190-00","67402-BZ190-00","67401-BZ150-00",
-                "67402-BZ160-00","67403-BZ180-00","67404-BZ180-00","67405-BZ090-00","67406-BZ090-00","67407-BZ190-00","67408-BZ190-00"
-            ];
+            $lotSegment = $shift ? $shift . now()->format('ymd') : '-';
             for ($i = 0; $i < $quantity; $i++) {
-                $qrValue = null;
-                if($qr_value == $label->job_no){
-                    $qr = $label->job_no;
-                    $qrValue = $label->job_no . "-" . str_pad($i + 1, 3, '0', STR_PAD_LEFT);
-                }else if($qr_value == $label->part_no && in_array($qr_value, $specialPartNos, true)){
-                    $qr = $label->part_no;
-                    $qrValue = $label->part_no . str_pad($i + 1, 3, '0', STR_PAD_LEFT) . "#" . $shift . date('ymd');
-                }
-                else if($qr_value == $label->part_no){
-                    $qr = $label->part_no;
-                    $qrValue = $label->part_no . str_pad($i + 1, 3, '0', STR_PAD_LEFT);
-                }
-                $qrCodes[] = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')->size(100)->generate($qrValue);
+                $seq = str_pad($i + 1, 3, '0', STR_PAD_LEFT);
+                $qrPayload = $label->part_no . '#' . $label->job_no . '#' . $seq . '#' . $lotSegment;
+                $qrCodes[] = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')->size(100)->generate($qrPayload);
             }
             
             $printData = [
                 'label' => $label,
                 'quantity' => $quantity,
+                'displayQty' => $this->effectiveLabelQty($label),
                 'qcPass' => $qcPass,
                 'shift' => $shift,
                 'printDate' => now()->format('d/m/Y'),
                 'lotNo' => $shift ? now()->format('ymd') : '-',
                 'qrCodes' => $qrCodes,
-                'qrValue' => $qr
             ];
             
             // Generate PDF with Spatie Laravel PDF

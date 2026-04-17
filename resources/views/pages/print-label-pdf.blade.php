@@ -48,13 +48,9 @@
                                                 <td class="row-quantity">
                                                     <table class="quantity-table">
                                                         <tr>
-                                                            <td style="margin-left: -10px" id="quantity-text">: {{$printData['label']->qty}} pcs</td>
+                                                            <td style="margin-left: -10px" id="quantity-text">: {{ $printData['displayQty'] ?? $printData['label']->qty }} pcs</td>
                                                             <td class="unique-code">{{$printData['label']->kode_unik}}</td>
-                                                            @if(strlen($printData['qrValue'])==3 || strlen($printData['qrValue'])==4 || strlen($printData['qrValue'])==5 ||strlen($printData['qrValue'])==6 ||strlen($printData['qrValue'])==7 ||strlen($printData['qrValue'])==8)
-                                                            <td class="job-number">{{ $printData['qrValue']."-".str_pad($i+1, 3, '0', STR_PAD_LEFT) }}</td>
-                                                            @else
-                                                            <td class="job-number">{{ $printData['qrValue'].str_pad($i+1, 3, '0', STR_PAD_LEFT) }}</td>
-                                                            @endif
+                                                            <td class="job-number" style="font-size:7px;line-height:1.1;word-break:break-all;">{{ $printData['label']->part_no }}#{{ $printData['label']->job_no }}#{{ str_pad($i+1, 3, '0', STR_PAD_LEFT) }}#{{ $printData['shift'].$printData['lotNo'] }}</td>
                                                             {{-- <td class="job-number">14110-52S00-00001</td> --}}
                                                         </tr>
                                                     </table>

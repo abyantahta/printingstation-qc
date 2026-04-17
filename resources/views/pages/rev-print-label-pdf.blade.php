@@ -97,17 +97,9 @@
                             MARKING
                         </td>
 
-                        @if(strlen($printData['qrValue'])==3 || strlen($printData['qrValue'])==4 || strlen($printData['qrValue'])==5 ||strlen($printData['qrValue'])==6 ||strlen($printData['qrValue'])==7 ||strlen($printData['qrValue'])==8)
-                        <td style="width:21%;height:100%;display:inline-block;border-left:1px solid black;height:100%;text-align:center;padding-top:5px;font-size:10px">
-                            {{ $printData['qrValue']."-".str_pad($i+1, 3, '0', STR_PAD_LEFT) }}
-                            {{-- 25051-BZ230-00-KZ001 --}}
+                        <td style="width:21%;height:100%;display:inline-block;border-left:1px solid black;height:100%;text-align:center;padding-top:5px;font-size:8px;line-height:1.1;word-break:break-all">
+                            {{ $printData['label']->part_no }}#{{ $printData['label']->job_no }}#{{ str_pad($i+1, 3, '0', STR_PAD_LEFT) }}#{{ $printData['shift'].$printData['lotNo'] }}
                         </td>
-                        @else
-                        <td style="width:21%;height:100%;display:inline-block;border-left:1px solid black;height:100%;text-align:center;padding-top:5px;font-size:11px">
-                            {{ $printData['qrValue'].str_pad($i+1, 3, '0', STR_PAD_LEFT) }}
-                            {{-- 25051-BZ230-00-KZ001 --}}
-                        </td>
-                        @endif
                         </td>
 
 
@@ -125,7 +117,7 @@
                                     <td style="width:12%;height:100%;display:inline-block;;height:100%;text-align:center">
                                         <table style="border-left:1px solid black;border-top:1px solid black;height:100%">
                                             <tr style="height:15%;background-color: #adaaaa;"><td>Qty<span style="font-size:7px">(pcs)</span></td></tr>
-                                            <tr style="height:85%;font-size:20px"><td>{{$printData['label']->qty}}</td></tr>
+                                            <tr style="height:85%;font-size:20px"><td>{{ $printData['displayQty'] ?? $printData['label']->qty }}</td></tr>
                                         </table>
                                     </td>
                                     <td style="width:18%;height:100%;display:inline-block;;height:100%;text-align:center">

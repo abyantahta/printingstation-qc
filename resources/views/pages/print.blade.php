@@ -124,13 +124,13 @@
                                             <td class="h-6 flex items-center  w-22 pl-2 ">QUANTITY</td>
                                             <td class="h-6 flex items-center  grow ">
                                                 <div class="w-[25.4%]  h-full flex items-center ">:
-                                                    {{ $label ? $label->qty . ' pcs' : '-' }}</div>
+                                                    {{ $label ? $labelDisplayQty . ' pcs' : '-' }}</div>
                                                 <div
                                                     class="w-[31.2%] text-lg h-full flex items-center justify-center   border-l-1 border-r-1">
                                                     {{ $label ? $label->kode_unik : '-' }}</div>
                                                 <div
                                                     class="w-[42%]  h-full  flex items-center justify-center text-[0.60rem]">
-                                                    {{ $qr_value ? $qr_value . '-001' : '-' }}</div>
+                                                    {{ $label ? $label->part_no . '#' . $label->job_no . '#001#' . ($shift ? $shift . date('ymd') : '-') : '-' }}</div>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -294,17 +294,9 @@
                                         MARKING
                                     </td>
             
-                                    @if(strlen($qr_value)==3 || strlen($qr_value)==4 || strlen($qr_value)==5 ||strlen($qr_value)==6 ||strlen($qr_value)==7 ||strlen($qr_value)==8)
-                                    <td style="width:21%;height:100%;display:inline-block;border-left:1px solid black;height:100%;text-align:center;padding-top:5px;font-size:10px">
-                                        {{ $qr_value? $qr_value."-".str_pad(1, 3, '0', STR_PAD_LEFT): '' }}
-                                        {{-- 25051-BZ230-00-KZ001 --}}
+                                    <td style="width:21%;height:100%;display:inline-block;border-left:1px solid black;height:100%;text-align:center;padding-top:5px;font-size:9px;word-break:break-all;line-height:1.1">
+                                        {{ $label ? $label->part_no . '#' . $label->job_no . '#001#' . ($shift ? $shift . date('ymd') : '-') : '' }}
                                     </td>
-                                    @else
-                                    <td style="width:21%;height:100%;display:inline-block;border-left:1px solid black;height:100%;text-align:center;padding-top:5px;font-size:11px">
-                                        {{ $qr_value? $qr_value."-".str_pad(1, 3, '0', STR_PAD_LEFT): '' }}
-                                        {{-- 25051-BZ230-00-KZ001 --}}
-                                    </td>
-                                    @endif
                                     </td>
             
             
@@ -324,7 +316,7 @@
                                                         <tr style="height:15%;background-color: #adaaaa;"><td>
                                                             Qty<span style="font-size:7px">(pcs)</span>
                                                         </td></tr>
-                                                        <tr style="height:85%;font-size:20px"><td>{{ $label ? $label->qty: '-' }}</td></tr>
+                                                        <tr style="height:85%;font-size:20px"><td>{{ $label ? $labelDisplayQty: '-' }}</td></tr>
                                                     </table>
                                                 </td>
                                                 <td style="width:18%;height:100%;display:inline-block;;height:100%;text-align:center">
@@ -392,6 +384,16 @@
                         <option class="" value="C" {{ $shift == 'C' ? 'selected' : '' }}>C</option>
                     </select>
                 </form>
+                @if(!empty($showTmminMarket))
+                <form action="{{ route('update.tmmin.market') }}" method="POST" class="w-full">
+                    @csrf
+                    <label for="tmmin_market" class="sr-only">TMMIN</label>
+                    <select required class="border-3 rounded-md h-12 pl-8 w-full bg-amber-50" name="tmmin_market" id="tmmin_market" title="TMMIN Export / local ADM">
+                        <option value="export" {{ ($tmminMarket ?? 'local_adm') === 'export' ? 'selected' : '' }}>TMMIN Export</option>
+                        <option value="local_adm" {{ ($tmminMarket ?? 'local_adm') === 'local_adm' ? 'selected' : '' }}>TMMIN local/ADM</option>
+                    </select>
+                </form>
+                @endif
                 <form action="{{ route('update.qc.pass') }}" method="POST" class="w-full">
                     @csrf
                     <select required class="border-3 rounded-md h-12 pl-8 w-full" name="qc_pass" id="qc_pass">
@@ -543,6 +545,14 @@
                 // Submit the shift form to update the session
                 this.form.submit();
             });
+
+            const tmminMarketSelect = document.getElementById('tmmin_market');
+            if (tmminMarketSelect) {
+                tmminMarketSelect.addEventListener('change', function() {
+                    validateForm();
+                    this.form.submit();
+                });
+            }
 
             document.getElementById('qc_pass').addEventListener('change', function() {
                 validateForm();
