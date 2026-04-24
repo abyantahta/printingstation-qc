@@ -1,4 +1,8 @@
 <x-layout>
+@php
+    $isKawasakiCustomer = strtoupper(trim((string) ($printData['label']->customer ?? ''))) === 'KAWASAKI';
+    $jobNoLabelText = $isKawasakiCustomer ? 'SERIAL NUMBER' : 'JOB NO';
+@endphp
 @for($i = 0; $i < $printData['quantity']; $i++)
     <div class="label-outer">
         <div class="label-page">
@@ -82,7 +86,7 @@
                                                     <table class="grid-table" style=" ;height:70px;">
                                                         <tr style="">
                                                             <td class="d55-cell">{{$printData['label']->model}}</td>
-                                                            <td class="job-cell">JOB NO</td>
+                                                            <td class="job-cell">{{ $jobNoLabelText }}</td>
                                                             <td class="mark-cell">MARK</td>
                                                         </tr>
                                                         <tr style="">

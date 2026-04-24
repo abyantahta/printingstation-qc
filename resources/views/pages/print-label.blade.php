@@ -1,4 +1,9 @@
 <x-layout>
+    @php
+        $isKawasakiCustomer = strtoupper(trim((string) ($printData['label']->customer ?? ''))) === 'KAWASAKI';
+        $jobNoLabelText = $isKawasakiCustomer ? 'SERIAL NUMBER' : 'JOB NO';
+    @endphp
+
     <div class="no-print mb-4">
         <button onclick="window.print()" class="bg-blue-500 text-white px-4 py-2 rounded">Print Labels</button>
         <a href="{{ route('print') }}" class="bg-gray-500 text-white px-4 py-2 rounded ml-2">Back to Print Page</a>
@@ -51,7 +56,7 @@
                     <div class="grow  font-bold text-[0.7rem]">
                         <div class="h-4 w-full  flex outline-1">
                             <div class="w-22  h-full flex items-center justify-center">D55</div>
-                            <div class="w-[4.15rem] h-full  flex items-center justify-center border-r-1 border-l-1">JOB NO</div>
+                            <div class="w-[4.15rem] h-full  flex items-center justify-center border-r-1 border-l-1">{{ $jobNoLabelText }}</div>
                             <div class="w-[4.9rem]  h-full  flex items-center justify-center ">MARK</div>
                         </div>
                         <div class="h-[3.3rem] w-full flex outline-1">

@@ -1,4 +1,8 @@
 <x-layout>
+    @php
+        $isKawasakiCustomer = $label && strtoupper(trim((string) $label->customer)) === 'KAWASAKI';
+        $jobNoLabelText = $isKawasakiCustomer ? 'SERIAL NUMBER' : 'JOB NO';
+    @endphp
 
 
 
@@ -155,7 +159,7 @@
                                             {{ $label ? $label->model : '-' }}</div>
                                         <div
                                             class="w-[4.15rem] h-full  flex items-center justify-center border-r-1 border-l-1">
-                                            JOB NO</div>
+                                            {{ $jobNoLabelText }}</div>
                                         <div class="w-[4.9rem]  h-full  flex items-center justify-center ">MARK</div>
                                     </div>
                                     <div class="h-[3.3rem] w-full flex outline-1">
@@ -216,7 +220,7 @@
                                                 </td>
                                                 <td style="width:18%;height:100%;display:inline-block;height:100%;text-align:center;border-left:1px solid black;">
                                                     <table style="height:100%">
-                                                        <tr style="height:15%;background-color: #adaaaa"><td>JOB NO</td></tr>
+                                                        <tr style="height:15%;background-color: #adaaaa"><td>{{ $jobNoLabelText }}</td></tr>
                                                         <tr style="height:85%;font-size:15px"><td>{{ $label ? $label->job_no : '-' }}</td></tr>
                                                     </table>
                                                 </td>
@@ -778,7 +782,7 @@
                                             <table class="grid-table">
                                                 <tr style="">
                                                     <td class="d55-cell">D55</td>
-                                                    <td class="job-cell">JOB NO</td>
+                                                    <td class="job-cell">{{ $jobNoLabelText }}</td>
                                                     <td class="mark-cell">MARK</td>
                                                 </tr>
                                                 <tr>
