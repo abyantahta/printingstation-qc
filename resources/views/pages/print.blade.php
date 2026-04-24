@@ -1,7 +1,7 @@
 <x-layout>
     @php
         $isKawasakiCustomer = $label && strtoupper(trim((string) $label->customer)) === 'KAWASAKI';
-        $jobNoLabelText = $isKawasakiCustomer ? 'SERIAL NUMBER' : 'JOB NO';
+        $jobNoLabelText = $isKawasakiCustomer ? 'SERIAL NO' : 'JOB NO';
     @endphp
 
 

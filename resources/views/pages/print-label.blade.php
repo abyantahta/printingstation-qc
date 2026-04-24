@@ -1,7 +1,7 @@
 <x-layout>
     @php
         $isKawasakiCustomer = strtoupper(trim((string) ($printData['label']->customer ?? ''))) === 'KAWASAKI';
-        $jobNoLabelText = $isKawasakiCustomer ? 'SERIAL NUMBER' : 'JOB NO';
+        $jobNoLabelText = $isKawasakiCustomer ? 'SERIAL NO' : 'JOB NO';
     @endphp
 
     <div class="no-print mb-4">
