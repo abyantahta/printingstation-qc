@@ -102,7 +102,7 @@
                         </td>
 
                         <td style="width:21%;height:100%;display:inline-block;border-left:1px solid black;height:100%;text-align:center;padding-top:5px;font-size:8px;line-height:1.1;word-break:break-all">
-                            {{ $printData['label']->part_no }}#{{ $printData['label']->job_no }}#{{ str_pad($i+1, 3, '0', STR_PAD_LEFT) }}#{{ $printData['shift'].$printData['lotNo'] }}
+                            {{ $printData['label']->part_no }}#{{ $printData['label']->job_no }}#{{ \App\Support\LabelSequence::format(($printData['sequenceOffset'] ?? 0) + $i + 1) }}#{{ $printData['shift'].$printData['lotNo'] }}
                         </td>
                         </td>
 

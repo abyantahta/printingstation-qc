@@ -134,7 +134,7 @@
                                                     {{ $label ? $label->kode_unik : '-' }}</div>
                                                 <div
                                                     class="w-[42%]  h-full  flex items-center justify-center text-[0.60rem]">
-                                                    {{ $label ? $label->part_no . '#' . $label->job_no . '#001#' . ($shift ? $shift . date('ymd') : '-') : '-' }}</div>
+                                                    {{ $label ? $label->part_no . '#' . $label->job_no . '#' . $nextPrintSequence . '#' . ($shift ? $shift . date('ymd') : '-') : '-' }}</div>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -299,7 +299,7 @@
                                     </td>
             
                                     <td style="width:21%;height:100%;display:inline-block;border-left:1px solid black;height:100%;text-align:center;padding-top:5px;font-size:9px;word-break:break-all;line-height:1.1">
-                                        {{ $label ? $label->part_no . '#' . $label->job_no . '#001#' . ($shift ? $shift . date('ymd') : '-') : '' }}
+                                        {{ $label ? $label->part_no . '#' . $label->job_no . '#' . $nextPrintSequence . '#' . ($shift ? $shift . date('ymd') : '-') : '' }}
                                     </td>
                                     </td>
             
@@ -419,7 +419,7 @@
                             type="number" min="1" value="{{ session('print_quantity', '') }}" required> --}}
                             <select required class="border-3 rounded-md h-12 pl-8 w-full" name="quantity" id="quantity">
                                 <option class="" value="" {{ session('print_quantity') ? '' : 'selected' }}>Quantity</option>
-                                @for($i = 1; $i <= 99; $i++)
+                                @for($i = 1; $i <= 999; $i++)
                                     <option class="" value="{{ $i }}" {{ (string)session('print_quantity') === (string)$i ? 'selected' : '' }}>{{ $i }}</option>
                                 @endfor
                             </select>
@@ -498,9 +498,11 @@
             const qcPass = document.getElementById('qc_pass').value;
             const quantity = document.getElementById('quantity').value;
             const submitBtn = document.getElementById('submitBtn');
+            const qtyNum = parseInt(quantity, 10);
+            const qtyOk = quantity !== '' && !Number.isNaN(qtyNum) && qtyNum >= 1 && qtyNum <= 999;
 
             // Check if all required fields are filled
-            const isValid = printerId !== '' && shift !== '' && qcPass !== '' && quantity !== '' && parseInt(quantity) > 0;
+            const isValid = printerId !== '' && shift !== '' && qcPass !== '' && qtyOk;
 
             // Enable/disable submit button and update styling
             submitBtn.disabled = !isValid;
@@ -621,10 +623,12 @@
             const shift = document.getElementById('shift').value;
             const qcPass = document.getElementById('qc_pass').value;
             const quantity = document.getElementById('quantity').value;
+            const qtyNum = parseInt(quantity, 10);
+            const qtyOk = quantity !== '' && !Number.isNaN(qtyNum) && qtyNum >= 1 && qtyNum <= 999;
 
-            if (printerId === '' || shift === '' || qcPass === '' || quantity === '' || parseInt(quantity) <= 0) {
+            if (printerId === '' || shift === '' || qcPass === '' || !qtyOk) {
                 e.preventDefault();
-                alert('Please fill in all required fields: Printer, Shift, QC Pass, and Quantity (must be greater than 0)');
+                alert('Lengkapi Printer, Shift, QC Pass, dan Quantity (1–999).');
                 return false;
             }
 

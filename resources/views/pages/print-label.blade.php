@@ -40,7 +40,7 @@
                                 <td class="h-6 flex items-center  grow ">
                                     <div class="w-[4.1rem] h-full flex items-center ">: {{ ($printData['displayQty'] ?? $printData['label']->qty) . ' pcs'}}</div>
                                     <div class="w-20 text-lg h-full flex items-center justify-center   border-l-1 border-r-1">{{ $printData['label']->kode_unik}}</div>
-                                    <div class="w-28 h-full  flex items-center justify-center text-md">{{ $printData['label']->job_no."-".str_pad($i+1, 3, '0', STR_PAD_LEFT)}}</div>
+                                    <div class="w-28 h-full  flex items-center justify-center text-md">{{ $printData['label']->job_no."-".\App\Support\LabelSequence::format(($printData['sequenceOffset'] ?? 0) + $i + 1) }}</div>
                                 </td>
                             </tr>
                         </tbody>

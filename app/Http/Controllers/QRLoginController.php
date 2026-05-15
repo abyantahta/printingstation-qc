@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\History;
 use App\Models\Label;
+use App\Support\LabelSequence;
 use App\Models\Piclabel;
 use App\Models\Qcpass;
 use Carbon\Carbon;
@@ -190,6 +191,10 @@ class QRLoginController extends Controller
         $showTmminMarket = $label && $this->isTmminSelectablePart($label);
         $tmminMarket = session('tmmin_market', 'local_adm');
         $labelDisplayQty = $this->effectiveLabelQty($label);
+
+        $lotNoFull = ($label && $shift) ? ($shift . now()->format('ymd')) : '-';
+        $printedQtyForLot = $this->printedQuantityForPartLot($label, $lotNoFull);
+        $nextPrintSequence = LabelSequence::format($printedQtyForLot + 1);
         
         return view('pages.print', compact(
             'qc_pass',
@@ -204,7 +209,8 @@ class QRLoginController extends Controller
             'hasPrintNodeApiKey',
             'showTmminMarket',
             'tmminMarket',
-            'labelDisplayQty'
+            'labelDisplayQty',
+            'nextPrintSequence'
         ));
     }
 
@@ -369,8 +375,12 @@ class QRLoginController extends Controller
 
     public function printLabel(Request $request){
         // User is already authenticated by middleware
+        $validated = $request->validate([
+            'quantity' => ['required', 'integer', 'min:1', 'max:999'],
+        ]);
+        $quantity = $validated['quantity'];
+
         try {
-            $quantity = $request->input('quantity');
             $label = session('label_data');
             $qcPass = session('qc_pass');
             $shift = session('shift');
@@ -384,10 +394,6 @@ class QRLoginController extends Controller
                 return redirect()->back()->withErrors('Please select a printer first.');
             }
             
-            if (!$quantity || $quantity <= 0) {
-                return redirect()->back()->withErrors('Please enter a valid quantity.');
-            }
-            
             // Store quantity in session for display
             session(['print_quantity' => $quantity]);
             
@@ -397,8 +403,11 @@ class QRLoginController extends Controller
                 return redirect()->back()->withErrors('QC Pass not found.');
             }
             
-            // Generate lot number
+            // Generate lot number (sama string dengan di label / QR)
             $lotNo = $shift ? now()->format('ymd') : '-';
+            $lotNoFull = $shift ? $shift.$lotNo : '-';
+
+            $sequenceOffset = $this->printedQuantityForPartLot($label, $lotNoFull);
             
             // Get current user for tracking who printed from session
             $userData = $this->getCurrentUser();
@@ -408,7 +417,7 @@ class QRLoginController extends Controller
             $historyRecord = History::create([
                 'qcpass_id' => $qcPassRecord->id,
                 'label_id' => $label->id,
-                'lot_no' => $shift.$lotNo,
+                'lot_no' => $lotNoFull,
                 'quantity' => $quantity,
                 'printed_by' => $printedBy,
                 'shift' => $shift,
@@ -417,9 +426,9 @@ class QRLoginController extends Controller
             
             // Generate QR codes — format standar: part_no#job_no#seq#lot_no
             $qrCodes = [];
-            $lotSegment = $shift ? $shift . now()->format('ymd') : '-';
+            $lotSegment = $lotNoFull;
             for ($i = 0; $i < $quantity; $i++) {
-                $seq = str_pad($i + 1, 3, '0', STR_PAD_LEFT);
+                $seq = LabelSequence::format($sequenceOffset + $i + 1);
                 $qrPayload = $label->part_no . '#' . $label->job_no . '#' . $seq . '#' . $lotSegment;
                 $qrCodes[] = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')->size(100)->generate($qrPayload);
             }
@@ -427,6 +436,7 @@ class QRLoginController extends Controller
             $printData = [
                 'label' => $label,
                 'quantity' => $quantity,
+                'sequenceOffset' => $sequenceOffset,
                 'displayQty' => $this->effectiveLabelQty($label),
                 'qcPass' => $qcPass,
                 'shift' => $shift,
@@ -508,6 +518,24 @@ class QRLoginController extends Controller
             Log::error('Stack trace: ' . $e->getTraceAsString());
             return redirect()->back()->withErrors('Error generating PDF: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Total quantity cetak sukses untuk kombinasi part_no + lot_no (sequence unik per part per lot).
+     */
+    private function printedQuantityForPartLot(?Label $label, string $lotNoFull): int
+    {
+        if (! $label || $lotNoFull === '-') {
+            return 0;
+        }
+
+        return (int) History::query()
+            ->where('print_status', 'success')
+            ->where('lot_no', $lotNoFull)
+            ->whereHas('label', function ($q) use ($label) {
+                $q->where('part_no', $label->part_no);
+            })
+            ->sum('quantity');
     }
 
     public function history(){
